@@ -7,7 +7,7 @@ spec:
   - image: jfloff/alpine-python:latest
     name: py-container
     command: ["python"]
-    args: ["/data/QmUP5D6SPwfQSPmoQuXYNqWV2g1Kk3dDHD6mt8NumA75Av", "QmU5kNjTxCkPZ4NBTa8hb7GPMny4RkCFLrNHCSVQxx7Qcm"] # code.py data.txt
+    args: ["/data/QmUP5D6SPwfQSPmoQuXYNqWV2g1Kk3dDHD6mt8NumA75Av", "QmYRzm6TJpTfKoe72FM9hhuXvZb6FeNiFCQt9XqQpnc5Pm"] # code.py data.txt
     volumeMounts:
     - mountPath: /data
       name: ipfs-volume
