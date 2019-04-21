@@ -34,6 +34,16 @@ services:
     networks: 
       - cluster
 
+  ipfsnode:
+    image: ipfs/go-ipfs:v0.4.20
+    environment:
+      - IPFS_PROFILE=local-discovery
+    volumes:
+      - ./ipfsconfig/swarm.key:/data/ipfs/swarm.key
+      - ./ipfsdata:/import
+    networks:
+      - cluster
+
 volumes:
   k3s-server: {}
 

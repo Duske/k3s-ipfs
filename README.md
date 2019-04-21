@@ -31,9 +31,14 @@ k create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --s
 k --namespace=kube-system port-forward kubernetes-dashboard-57df4db6b-tcdsx 8443
 ```
 
-
-
 ## Node Token
 ```
 docker exec -it k3s-ipfs_server_1 cat /var/lib/rancher/k3s/server/node-token
 ```
+
+## IPFS
+
+### Add files to private network
+
+1. Place them into `./ipfsdata`
+2. run `docker-compose exec ipfsnode ipfs add -r /import`
