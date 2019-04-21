@@ -2,9 +2,9 @@ FROM alpine:3.9
 
 RUN apk update && apk add wget fuse tar bash ca-certificates
 RUN wget \
-    https://dist.ipfs.io/go-ipfs/v0.4.19/go-ipfs_v0.4.19_linux-386.tar.gz \
+    https://dist.ipfs.io/go-ipfs/v0.4.20/go-ipfs_v0.4.20_linux-386.tar.gz \
     https://github.com/rancher/k3s/releases/download/v0.4.0/k3s
-RUN tar -xzf go-ipfs_v0.4.19_linux-386.tar.gz && rm go-ipfs_v0.4.19_linux-386.tar.gz
+RUN tar -xzf go-ipfs_v0.4.20_linux-386.tar.gz && rm go-ipfs_v0.4.20_linux-386.tar.gz
 RUN chmod a+x \
     go-ipfs/ipfs \
     k3s

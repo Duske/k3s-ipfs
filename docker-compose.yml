@@ -1,7 +1,10 @@
 version: '3.5'
 services:
   server:
-    image: k3s-ipfs:4.0
+    image: k3s-ipfs:4.0-4.2
+    build:
+      # Path to the Docker file
+      context: ./image
     command: "server --disable-agent --no-deploy traefik"
     privileged: true
     environment:
@@ -18,7 +21,10 @@ services:
       - cluster
 
   node:
-    image: k3s-ipfs:4.0
+    image: k3s-ipfs:4.0-4.2
+    build:
+      # Path to the Docker file
+      context: ./image
     tmpfs:
       - /run
       - /var/run
