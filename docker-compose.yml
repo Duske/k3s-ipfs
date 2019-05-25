@@ -5,7 +5,7 @@ services:
     build:
       # Path to the Docker file
       context: ./image
-    command: "server --disable-agent --kubelet-arg='address=0.0.0.0' --no-deploy traefik"
+    command: "server --kubelet-arg='address=0.0.0.0' --no-deploy traefik" #--disable-agent
     privileged: true
     environment:
       - K3S_CLUSTER_SECRET=test
