@@ -1,11 +1,11 @@
 version: '3.5'
 services:
   server:
-    image: k3s-ipfs:4.0-4.2
+    image: k3s-ipfs:0.5.0-0.4.2
     build:
       # Path to the Docker file
       context: ./image
-    command: "server --disable-agent --no-deploy traefik"
+    command: "server --disable-agent --kubelet-arg='address=0.0.0.0' --no-deploy traefik"
     privileged: true
     environment:
       - K3S_CLUSTER_SECRET=test
@@ -22,7 +22,7 @@ services:
       - cluster
 
   node:
-    image: k3s-ipfs:4.0-4.2
+    image: k3s-ipfs:0.5.0-0.4.2
     build:
       # Path to the Docker file
       context: ./image
