@@ -30,7 +30,7 @@ services:
       - /run
       - /var/run
     privileged: true
-    command: "agent"
+    command: "agent --kubelet-arg='eviction-hard=imagefs.available<5%,nodefs.available<5%,memory.available<6000Mi'"
     depends_on:
       - server
     volumes:
