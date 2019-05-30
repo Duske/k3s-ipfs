@@ -6,12 +6,13 @@ spec:
   containers:
   - name: memory-test-ctr
     image: polinux/stress
-    # resources:
-    #   limits:
-    #     memory: "4000Mi"
+    resources:
+      limits:
+        #memory: "4000Mi"
+        cpu: 200m
     #   requests:
     #     memory: "3000Mi"
     command: ["stress"]
-    args: ["--vm", "1", "--vm-bytes", "4000M", "--vm-hang", "1"]
+    args: ["--vm", "1", "--vm-bytes", "2000M", "--vm-hang", "1"]
   nodeSelector:
     worker: limited
