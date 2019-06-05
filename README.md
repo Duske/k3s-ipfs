@@ -3,7 +3,7 @@
 ## Build image
 
 ```
-docker build -t k3s-ipfs:4.0 .
+docker-compose build
 ```
 
 ## Alias
@@ -11,14 +11,16 @@ docker build -t k3s-ipfs:4.0 .
 alias k="kubectl --kubeconfig kubeconfig.yaml"
 ```
 
+## Generic
+```
+k get pods --all-namespaces
+
+```
+
 ## Dashboard
 ```
 # http only
 k apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/alternative/kubernetes-dashboard.yaml
-
-k get pods --all-namespaces
-
-k apply -f setup
 
 k -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
 
@@ -27,7 +29,7 @@ k create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --s
 
 #### Proxy
 ```
-k --namespace=kube-system port-forward kubernetes-dashboard-57df4db6b-tcdsx 9090
+k -n kube-system port-forward deployment/kubernetes-dashboard 9090:9090
 ```
 [http://localhost:9090/#!/overview?namespace=default](http://localhost:9090/#!/overview?namespace=default)
 
@@ -40,6 +42,15 @@ k top nodes
 ## Node Token
 ```
 docker exec -it k3s-ipfs_server_1 cat /var/lib/rancher/k3s/server/node-token
+```
+
+## Argo
+```
+# UI
+k -n argo port-forward deployment/argo-ui 8001:8001
+
+# Publish workflow hello-world
+argo submit --kubeconfig kubeconfig.yaml --watch workflows/hello-world.yaml
 ```
 
 ## IPFS
