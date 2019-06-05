@@ -1,0 +1,32 @@
+
+# This template demonstrates a steps template and how to control sequential vs. parallel steps.
+# In this example, the hello1 completes before the hello2a, and hello2b steps, which run in parallel.
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: steps-
+spec:
+  entrypoint: hello-hello-hello
+
+  templates:
+  - name: hello-hello-hello
+    steps:
+    - - name: hello1
+        template: alpine
+    - - name: hello2a
+        template: alpine
+      - name: hello2b
+        template: alpine
+
+  - name: alpine
+    container:
+      image: alpine:3.7
+      command: ["cat", "/data/QmXV91Q6ULx6iwA288SzFieTP63J3zJnJNDjvQVqGPfXyh"]
+      volumeMounts:
+        - mountPath: /data
+          name: ipfs-volume
+    volumes:
+    - name: ipfs-volume
+      hostPath:
+        path: /ipfs
+        type: Directory
