@@ -1,0 +1,96 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: daemon-step-
+spec:
+  entrypoint: daemon-example
+  templates:
+  - name: daemon-example
+    dag:
+      tasks:
+      - name: minio
+        template: minioS3              # start an influxdb as a daemon (see the influxdb template spec below)
+
+      - name: producer
+        dependencies: [minio]
+        template: whalesay                # add entries to influxdb
+        arguments:
+          parameters:
+          - name: url
+            value: '{{tasks.minio.ip}}'
+
+    # - - name: consumer                  # consume intries from influxdb
+    #     template: influxdb-client
+    #     arguments:
+    #       parameters:
+    #       - name: cmd
+    #         value: curl --silent -G http://{{steps.influx.ip}}:8086/query?pretty=true --data-urlencode "db=mydb" --data-urlencode "q=SELECT * FROM cpu"
+
+  - name: minioS3
+    daemon: true # start influxdb as a daemon
+    container:
+      image: minio/minio:latest
+      env:
+        # Minio access key and secret key
+        - name: MINIO_ACCESS_KEY
+          value: minio
+        - name: MINIO_SECRET_KEY
+          value: minio123
+      args:
+        - server
+        - /storage
+      #command: #[sh, -c]
+      #args: ['mkdir -p /data/analyze && /usr/bin/minio server /data']
+
+  - name: whalesay
+    container:
+      image: docker/whalesay:latest
+      command: [sh, -c]
+      args: ["cowsay hello world | tee /tmp/hello_world.txt"]
+    inputs:
+      parameters:
+      - name: url
+    outputs:
+      artifacts:
+      - name: message
+        path: /tmp
+
+        s3:
+          endpoint: "{{inputs.parameters.url}}:9000"
+          bucket: analyze
+
+          # NOTE: by default, output artifacts are automatically tarred and gzipped before saving.
+          # As a best practice, .tgz or .tar.gz should be suffixed into the key name so the
+          # resulting object has an accurate file extension and mime-type. If archive is set to
+          # 'none', then preserve the appropriate file extension for the key name
+          key: hello_world.txt.tgz
+
+          accessKeySecret:
+            name: mysecret
+            key: accessKey
+          secretKeySecret:
+            name: mysecret
+            key: secretKey
+
+          # accessKeySecret and secretKeySecret are secret selectors. It references the k8s secret
+          # named 'my-s3-credentials'. This secret is expected to have have the keys 'accessKey'
+          # and 'secretKey', containing the base64 encoded credentials to the bucket.
+          # accessKeySecret:
+          #   name: my-s3-credentials
+          #   key: accessKey
+          # secretKeySecret:
+          #   name: my-s3-credentials
+          #   key: secretKey
+
+  # - name: influxdb-client
+  #   inputs:
+  #     parameters:
+  #     - name: cmd
+  #   container:
+  #     image: appropriate/curl:latest
+  #     command: ["/bin/sh", "-c"]
+  #     args: ["{{inputs.parameters.cmd}}"]
+  #     resources:
+  #       requests:
+  #         memory: 32Mi
+  #         cpu: 100m

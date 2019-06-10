@@ -1,4 +1,4 @@
-# K3S with IPFS
+# k3s with IPFS
 
 ## Build image
 
@@ -59,3 +59,13 @@ argo submit --kubeconfig kubeconfig.yaml --watch workflows/hello-world.yaml
 
 1. Place them into `./ipfsdata`
 2. run `docker-compose exec ipfsnode ipfs add -r /import`
+
+## k3s
+
+You can list the running containers with:
+
+`k3s crictl ps`
+
+And list the downloaded images with
+
+`k3s crictl images`
