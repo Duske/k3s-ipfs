@@ -1,3 +1,13 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+type: Opaque
+data:
+  accessKey: bWluaW8= #minio
+  secretKey: bWluaW8xMjM= #minio123
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
@@ -9,25 +19,40 @@ spec:
     dag:
       tasks:
       - name: minio
-        template: minioS3              # start an influxdb as a daemon (see the influxdb template spec below)
+        template: minioS3
 
-      - name: producer
+      - name: producer1
         dependencies: [minio]
-        template: whalesay                # add entries to influxdb
+        template: producer
         arguments:
           parameters:
           - name: url
             value: '{{tasks.minio.ip}}'
+          - name: myKey
+            value: 'foo'
 
-    # - - name: consumer                  # consume intries from influxdb
-    #     template: influxdb-client
-    #     arguments:
-    #       parameters:
-    #       - name: cmd
-    #         value: curl --silent -G http://{{steps.influx.ip}}:8086/query?pretty=true --data-urlencode "db=mydb" --data-urlencode "q=SELECT * FROM cpu"
+      - name: producer2
+        dependencies: [minio]
+        template: producer
+        arguments:
+          parameters:
+          - name: url
+            value: '{{tasks.minio.ip}}'
+          - name: myKey
+            value: 'bar'
+      
+      - name: print
+        dependencies: [producer1, producer2]
+        template: consumer
+        arguments:
+          artifacts:
+          - name: art1
+            from: "{{tasks.producer1.outputs.artifacts.message}}" 
+          - name: art2
+            from: "{{tasks.producer2.outputs.artifacts.message}}" 
 
   - name: minioS3
-    daemon: true # start influxdb as a daemon
+    daemon: true
     container:
       image: minio/minio:latest
       env:
@@ -36,61 +61,43 @@ spec:
           value: minio
         - name: MINIO_SECRET_KEY
           value: minio123
-      args:
-        - server
-        - /storage
-      #command: #[sh, -c]
-      #args: ['mkdir -p /data/analyze && /usr/bin/minio server /data']
-
-  - name: whalesay
-    container:
-      image: docker/whalesay:latest
       command: [sh, -c]
-      args: ["cowsay hello world | tee /tmp/hello_world.txt"]
+      args: ['mkdir -p /data/analyze && /usr/bin/minio server /data']
+
+  - name: producer
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args: ["echo {{inputs.parameters.myKey}} | tee /tmp/test.txt"]
     inputs:
       parameters:
-      - name: url
+        - name: url
+        - name: myKey
     outputs:
       artifacts:
       - name: message
         path: /tmp
-
+        archive:
+          none: {}
         s3:
           endpoint: "{{inputs.parameters.url}}:9000"
           bucket: analyze
-
-          # NOTE: by default, output artifacts are automatically tarred and gzipped before saving.
-          # As a best practice, .tgz or .tar.gz should be suffixed into the key name so the
-          # resulting object has an accurate file extension and mime-type. If archive is set to
-          # 'none', then preserve the appropriate file extension for the key name
-          key: hello_world.txt.tgz
-
+          insecure: true 
+          key: test.txt
           accessKeySecret:
             name: mysecret
             key: accessKey
           secretKeySecret:
             name: mysecret
             key: secretKey
-
-          # accessKeySecret and secretKeySecret are secret selectors. It references the k8s secret
-          # named 'my-s3-credentials'. This secret is expected to have have the keys 'accessKey'
-          # and 'secretKey', containing the base64 encoded credentials to the bucket.
-          # accessKeySecret:
-          #   name: my-s3-credentials
-          #   key: accessKey
-          # secretKeySecret:
-          #   name: my-s3-credentials
-          #   key: secretKey
-
-  # - name: influxdb-client
-  #   inputs:
-  #     parameters:
-  #     - name: cmd
-  #   container:
-  #     image: appropriate/curl:latest
-  #     command: ["/bin/sh", "-c"]
-  #     args: ["{{inputs.parameters.cmd}}"]
-  #     resources:
-  #       requests:
-  #         memory: 32Mi
-  #         cpu: 100m
+  - name: consumer
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args: ["cat /tmp/art1/test.txt && cat /tmp/art2/test.txt"]
+    inputs:
+      artifacts:
+      - name: art1
+        path: /tmp/art1
+      - name: art2
+        path: /tmp/art2
