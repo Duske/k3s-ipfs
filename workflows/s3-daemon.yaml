@@ -45,6 +45,11 @@ spec:
         dependencies: [producer1, producer2]
         template: consumer
         arguments:
+          parameters:
+            - name: file1
+              value: "foo"
+            - name: file2
+              value: "bar"
           artifacts:
           - name: art1
             from: "{{tasks.producer1.outputs.artifacts.message}}" 
@@ -68,7 +73,7 @@ spec:
     container:
       image: alpine:latest
       command: [sh, -c]
-      args: ["echo {{inputs.parameters.myKey}} | tee /tmp/test.txt"]
+      args: ["echo {{inputs.parameters.myKey}} | tee /tmp/{{inputs.parameters.myKey}}.txt"]
     inputs:
       parameters:
         - name: url
@@ -83,7 +88,7 @@ spec:
           endpoint: "{{inputs.parameters.url}}:9000"
           bucket: analyze
           insecure: true 
-          key: test.txt
+          key: "{{inputs.parameters.myKey}}.txt"
           accessKeySecret:
             name: mysecret
             key: accessKey
@@ -94,8 +99,11 @@ spec:
     container:
       image: alpine:latest
       command: [sh, -c]
-      args: ["cat /tmp/art1/test.txt && cat /tmp/art2/test.txt"]
+      args: ["cat /tmp/art1/{{inputs.parameters.file1}}.txt && cat /tmp/art2/{{inputs.parameters.file2}}.txt"]
     inputs:
+      parameters:
+        - name: file1
+        - name: file2
       artifacts:
       - name: art1
         path: /tmp/art1
