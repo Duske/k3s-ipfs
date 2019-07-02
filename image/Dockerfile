@@ -26,6 +26,8 @@ VOLUME /var/lib/rancher/k3s
 VOLUME /var/lib/cni
 VOLUME /var/log
 
+RUN mkdir /opt/local-path-provisioner
+
 COPY ./run.sh /
 RUN chmod +x run.sh
 ENTRYPOINT ["./run.sh"]

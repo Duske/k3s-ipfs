@@ -9,6 +9,10 @@ kubectl apply -f setup/dashboard
 # Metrics
 kubectl apply -f setup/metrics-server
 
+## Storage Provisioner
+kubectl apply -f setup/storage
+kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
 ## Argo
 kubectl create namespace argo
 kubectl -n argo apply -f setup/argo
