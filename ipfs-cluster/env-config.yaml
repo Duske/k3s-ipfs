@@ -5,5 +5,5 @@ metadata:
   name: env-config
 data:
   bootstrap-peer-id: QmPtQ7Cc3K7485nUGUFJbqyNeiXHboaqaumnAsZB8y62Km
-  ipfs-bootstrap-peer-id: Qme2joV44qiG38Q7YaEti6N1QMiM6XujXairxgJqJB9DeT
+  ipfs-bootstrap-peer-id: QmVMU6nH7E7t4Rx8JDbdTFpM2C3xwjx2ntUuTNXcgmxbC5
   # cluster: QmZAMhedhKv5rw7QeW1HE6pLyv3N1Wjq2rhxbZU8yj5hHL

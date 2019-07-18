@@ -28,6 +28,11 @@ spec:
                 configMapKeyRef:
                   name: env-config
                   key: ipfs-bootstrap-peer-id
+            - name: IPFS_PEER_PRIV_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secret-config
+                  key: ipfs-bootstrap-peer-priv-key
       containers:
         - name: ipfs
           image: "ipfs/go-ipfs:v0.4.21"

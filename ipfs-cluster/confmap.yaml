@@ -53,147 +53,19 @@ data:
     fi
 
     ipfs init --profile=badgerds #,server
-    # ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
-    # ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
-    # ipfs config --json Swarm.ConnMgr.HighWater 2000
-    # ipfs config --json Datastore.BloomFilterSize 1048576
-    # ipfs config Datastore.StorageMax 100GB
+    ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
+    ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
+    ipfs config --json Swarm.ConnMgr.HighWater 2000
+    ipfs config --json Datastore.BloomFilterSize 1048576
+    ipfs config Datastore.StorageMax 100GB
 
-    # PEER_HOSTNAME=`cat /proc/sys/kernel/hostname`
-    # echo $IPFS_PEER_ID
-    # grep -q ".*ipfs-cluster-0.*" /proc/sys/kernel/hostname
-    # if [ $? -eq 0 ]
-    #   then
-    #   echo "Is Bootstrap node! Setting fixed peer id"
-    #   ipfs config Identity.PeerID $IPFS_PEER_ID
-    #   ipfs config Identity.PrivKey CAASqQkwggSlAgEAAoIBAQDXaph7x+ZcxSXIFxHZ9JYHakDP/8mD33UPBY1KBJ7eLrhr8UA3Pc6gMB7sFUe7wVinij7rupXjprZ/eIMn5PpYaYeCjRhj40Vn718ahmotmP1eybyXXuUr/3WqeLnKa9swE7LmC/RhT9Db7DImcaaqssffG7pSpSr0Ap0AjTttxVqi21C3FF7VgV2yN+fSQkTrHLQ7hd9KghX6At3Ar4GrQkt4nXPwITtMy/G72iRdXPtGUMxDVArDenR3djaDF/7GxcaeAfLUeJyVw9bPXUh5z5ZYwMeHLOij4Ope3I1kgjfesVLNTQNsqh3XMDtCI/4efMoRDUMyFmdIl5SZA6SvAgMBAAECggEBAI+nDji9femvrxpYCBeI++PF/6K1uPSwN6fk0+vgWPFhxqp1H5W3Keu5K2XUaxnSPgS8NGmO7BX8PweSniQklq4O8cclwHYcQVSmVI2jxXrS42QqtBFdvwYwPY+JIpzSgED3Yf33Suj6CRYf1PG+KJ78yj0GiKJEcvh2Ja0QgekY0aaZcID2o2vcUPa3bdD88838i3wRx9L1Bhgr2whXdbl+Hbj0NyZ8QSZVjb9Echw2OZwjkflqHAn6W+C9cSAwdq7ESqymgS5S+JkuSxh2E0a1eEevIpEQ5j/Vy37sdFfd0vu31h9fNlq5t5SPK6DzaqEdexe3EP9CIWr8J+7sAUECgYEA5YPHro9VMZ+D08FBsv7pVQSOQepvII9RM5gM943pqWoo5+O4bUTVuAccp5fLknTO+cWnpIZzq8/YVLL+rUKZvCkgji1D+PiXBto2zt1/LKDFCQlvJ8KV/78A7rPwJ+ru/0D/8DkFVeCfteByW9w3EnbXoOKMqL/zXkRjHvapadsCgYEA8EZT7nouBflOrF25HsxxUs5rztDw29nPOG9x67QMAaxvPg04t/lkTeH5BkIg7mhXhQbW5v51HyZ8jes2h4guRo598VjiEkq6smMVmtxCCm85sySh1iAKkOKmFzGx8SQupDL5fi9PkFdqaQE+7QitozqBhad76b50YaWbfTUk2r0CgYEAtQoIxXG8QsNPqgXD/BxFE1HfoLD6bVV/ONJUUCU5ze+2Sov+2vo0FtBNUwlSg7jt1mmJviZsMXdmbhEvAJ4LRDewvVWJS2dTQg14tB5VhW9fXKx7aIJ97VjNtHxtEB+p2+B6whNIWSAw+rcLndgL/N2PYxGw4B9hKdeJ1E++/IcCgYEA5kmxlgb6Z3VcZy3pCNDP6Jq5j16JC15GEwQVfuBxBYWclS+c5g+ciF0GDW6CG55cC77TaFAIN1Pu2yLOf7YRDET0Bsa23utK50C6a1Oh5FhYSA/bINxS5CynHeHed43DOlM09zEnI+P0tDGiexLvQVwI2e39gLmu2Awe7DFsYk0CgYAWH7ghRPFQyQGFkSNSBZKPIy0hUqLJnEF4ACmQaqpU5xFnH5ZF4euBQiM/nn73AtSVQtjKpI02rOTR9FQ51ySw57fYTzejGjJOM1+UHlKLRSJIMnOhuzdRrO+2WGYmPVvr/k1htOoSEE8e+N6ZxNZERs3i/f8igfcD6v51k5SkQA==
-    # fi
-    # ipfs config show
-    # exit 0
-    rm -rf /data/ipfs/config
-    cat <<EOF >> /data/ipfs/config
-      {
-        "API": {
-          "HTTPHeaders": {}
-        },
-        "Addresses": {
-          "API": "/ip4/0.0.0.0/tcp/5001",
-          "Announce": [],
-          "Gateway": "/ip4/0.0.0.0/tcp/8080",
-          "NoAnnounce": [],
-          "Swarm": [
-            "/ip4/0.0.0.0/tcp/4001",
-            "/ip6/::/tcp/4001"
-          ]
-        },
-        "Bootstrap": [
-          "/dnsaddr/bootstrap.libp2p.io/ipfs/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN",
-          "/dnsaddr/bootstrap.libp2p.io/ipfs/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa",
-          "/dnsaddr/bootstrap.libp2p.io/ipfs/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb",
-          "/dnsaddr/bootstrap.libp2p.io/ipfs/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt",
-          "/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
-          "/ip4/104.236.179.241/tcp/4001/ipfs/QmSoLPppuBtQSGwKDZT2M73ULpjvfd3aZ6ha4oFGL1KrGM",
-          "/ip4/128.199.219.111/tcp/4001/ipfs/QmSoLSafTMBsPKadTEgaXctDQVcqN88CNLHXMkTNwMKPnu",
-          "/ip4/104.236.76.40/tcp/4001/ipfs/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U6aXMJDAbzgu2fzaDs64",
-          "/ip4/178.62.158.247/tcp/4001/ipfs/QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd",
-          "/ip6/2604:a880:1:20::203:d001/tcp/4001/ipfs/QmSoLPppuBtQSGwKDZT2M73ULpjvfd3aZ6ha4oFGL1KrGM",
-          "/ip6/2400:6180:0:d0::151:6001/tcp/4001/ipfs/QmSoLSafTMBsPKadTEgaXctDQVcqN88CNLHXMkTNwMKPnu",
-          "/ip6/2604:a880:800:10::4a:5001/tcp/4001/ipfs/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U6aXMJDAbzgu2fzaDs64",
-          "/ip6/2a03:b0c0:0:1010::23:1001/tcp/4001/ipfs/QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd"
-        ],
-        "Datastore": {
-          "BloomFilterSize": 1048576,
-          "GCPeriod": "1h",
-          "HashOnRead": false,
-          "Spec": {
-            "child": {
-              "path": "badgerds",
-              "syncWrites": true,
-              "truncate": true,
-              "type": "badgerds"
-            },
-            "prefix": "badger.datastore",
-            "type": "measure"
-          },
-          "StorageGCWatermark": 90,
-          "StorageMax": "100GB"
-        },
-        "Discovery": {
-          "MDNS": {
-            "Enabled": true,
-            "Interval": 10
-          }
-        },
-        "Experimental": {
-          "FilestoreEnabled": false,
-          "Libp2pStreamMounting": false,
-          "P2pHttpProxy": false,
-          "PreferTLS": false,
-          "QUIC": false,
-          "ShardingEnabled": false,
-          "UrlstoreEnabled": false
-        },
-        "Gateway": {
-          "APICommands": [],
-          "HTTPHeaders": {
-            "Access-Control-Allow-Headers": [
-              "X-Requested-With",
-              "Range",
-              "User-Agent"
-            ],
-            "Access-Control-Allow-Methods": [
-              "GET"
-            ],
-            "Access-Control-Allow-Origin": [
-              "*"
-            ]
-          },
-          "NoFetch": false,
-          "PathPrefixes": [],
-          "RootRedirect": "",
-          "Writable": false
-        },
-        "Identity": {
-          "PeerID": "Qme2joV44qiG38Q7YaEti6N1QMiM6XujXairxgJqJB9DeT",
-          "PrivKey": "CAASqQkwggSlAgEAAoIBAQDXaph7x+ZcxSXIFxHZ9JYHakDP/8mD33UPBY1KBJ7eLrhr8UA3Pc6gMB7sFUe7wVinij7rupXjprZ/eIMn5PpYaYeCjRhj40Vn718ahmotmP1eybyXXuUr/3WqeLnKa9swE7LmC/RhT9Db7DImcaaqssffG7pSpSr0Ap0AjTttxVqi21C3FF7VgV2yN+fSQkTrHLQ7hd9KghX6At3Ar4GrQkt4nXPwITtMy/G72iRdXPtGUMxDVArDenR3djaDF/7GxcaeAfLUeJyVw9bPXUh5z5ZYwMeHLOij4Ope3I1kgjfesVLNTQNsqh3XMDtCI/4efMoRDUMyFmdIl5SZA6SvAgMBAAECggEBAI+nDji9femvrxpYCBeI++PF/6K1uPSwN6fk0+vgWPFhxqp1H5W3Keu5K2XUaxnSPgS8NGmO7BX8PweSniQklq4O8cclwHYcQVSmVI2jxXrS42QqtBFdvwYwPY+JIpzSgED3Yf33Suj6CRYf1PG+KJ78yj0GiKJEcvh2Ja0QgekY0aaZcID2o2vcUPa3bdD88838i3wRx9L1Bhgr2whXdbl+Hbj0NyZ8QSZVjb9Echw2OZwjkflqHAn6W+C9cSAwdq7ESqymgS5S+JkuSxh2E0a1eEevIpEQ5j/Vy37sdFfd0vu31h9fNlq5t5SPK6DzaqEdexe3EP9CIWr8J+7sAUECgYEA5YPHro9VMZ+D08FBsv7pVQSOQepvII9RM5gM943pqWoo5+O4bUTVuAccp5fLknTO+cWnpIZzq8/YVLL+rUKZvCkgji1D+PiXBto2zt1/LKDFCQlvJ8KV/78A7rPwJ+ru/0D/8DkFVeCfteByW9w3EnbXoOKMqL/zXkRjHvapadsCgYEA8EZT7nouBflOrF25HsxxUs5rztDw29nPOG9x67QMAaxvPg04t/lkTeH5BkIg7mhXhQbW5v51HyZ8jes2h4guRo598VjiEkq6smMVmtxCCm85sySh1iAKkOKmFzGx8SQupDL5fi9PkFdqaQE+7QitozqBhad76b50YaWbfTUk2r0CgYEAtQoIxXG8QsNPqgXD/BxFE1HfoLD6bVV/ONJUUCU5ze+2Sov+2vo0FtBNUwlSg7jt1mmJviZsMXdmbhEvAJ4LRDewvVWJS2dTQg14tB5VhW9fXKx7aIJ97VjNtHxtEB+p2+B6whNIWSAw+rcLndgL/N2PYxGw4B9hKdeJ1E++/IcCgYEA5kmxlgb6Z3VcZy3pCNDP6Jq5j16JC15GEwQVfuBxBYWclS+c5g+ciF0GDW6CG55cC77TaFAIN1Pu2yLOf7YRDET0Bsa23utK50C6a1Oh5FhYSA/bINxS5CynHeHed43DOlM09zEnI+P0tDGiexLvQVwI2e39gLmu2Awe7DFsYk0CgYAWH7ghRPFQyQGFkSNSBZKPIy0hUqLJnEF4ACmQaqpU5xFnH5ZF4euBQiM/nn73AtSVQtjKpI02rOTR9FQ51ySw57fYTzejGjJOM1+UHlKLRSJIMnOhuzdRrO+2WGYmPVvr/k1htOoSEE8e+N6ZxNZERs3i/f8igfcD6v51k5SkQA=="
-        },
-        "Ipns": {
-          "RecordLifetime": "",
-          "RepublishPeriod": "",
-          "ResolveCacheSize": 128
-        },
-        "Mounts": {
-          "FuseAllowOther": false,
-          "IPFS": "/ipfs",
-          "IPNS": "/ipns"
-        },
-        "Pubsub": {
-          "DisableSigning": false,
-          "Router": "",
-          "StrictSignatureVerification": false
-        },
-        "Reprovider": {
-          "Interval": "12h",
-          "Strategy": "all"
-        },
-        "Routing": {
-          "Type": "dht"
-        },
-        "Swarm": {
-          "AddrFilters": null,
-          "ConnMgr": {
-            "GracePeriod": "20s",
-            "HighWater": 2000,
-            "LowWater": 600,
-            "Type": "basic"
-          },
-          "DisableBandwidthMetrics": false,
-          "DisableNatPortMap": false,
-          "DisableRelay": false,
-          "EnableAutoNATService": false,
-          "EnableAutoRelay": false,
-          "EnableRelayHop": false
-        }
-      }
-    EOF
-    cat /ipfs/data/config
+    PEER_HOSTNAME=`cat /proc/sys/kernel/hostname`
+    echo $IPFS_PEER_ID
+    grep -q ".*ipfs-cluster-0.*" /proc/sys/kernel/hostname
+    if [ $? -eq 0 ]
+      then
+      echo "Is Bootstrap node! Setting fixed peer id"
+      ipfs config Identity.PeerID $IPFS_PEER_ID
+      sed -i -E 's~("PrivKey": ")([a-zA-Z0-9_=\/-\\+]+)"~\1'$IPFS_PEER_PRIV_KEY'"~g' /data/ipfs/config
+      chown -R 1000 /data/ipfs/
+    fi
