@@ -1,0 +1,66 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ipfs-workflow
+spec:
+  entrypoint: daemon-example
+  templates:
+  - name: daemon-example
+    dag:
+      tasks:
+      - name: producer1
+        template: producer
+        arguments:
+          parameters:
+          - name: myKey
+            value: 'foo'
+
+      - name: producer2
+        template: producer
+        arguments:
+          parameters:
+          - name: myKey
+            value: 'bar'
+      # - name: keep-running
+      #   template: infinite  
+      
+      - name: print
+        dependencies: [producer1, producer2]
+        template: consumer
+        arguments:
+          artifacts:
+          - name: art1
+            from: "{{tasks.producer1.outputs.artifacts.message}}" 
+          - name: art2
+            from: "{{tasks.producer2.outputs.artifacts.message}}" 
+
+  - name: producer
+    container:
+      image: alpine:3.10
+      command: [sh, -c]
+      args: ["echo {{inputs.parameters.myKey}} | tee /tmp/data.txt"]
+    inputs:
+      parameters:
+        - name: myKey
+    outputs:
+      artifacts:
+      - name: message
+        path: /tmp/data.txt
+        ipfs:
+          storageEndpoint: "http://ipfs-cluster:9094/add"
+  - name: consumer
+    container:
+      image: alpine:3.10
+      command: [sh, -c]
+      args: [cat /tmp/art1 /tmp/art2 > file3 && cat file3]
+    inputs:
+      artifacts:
+      - name: art1
+        path: /tmp/art1
+      - name: art2
+        path: /tmp/art2
+  - name: infinite
+    container:
+      image: theduske/argoexec
+      command: [ "sleep" ]
+      args: [ "infinity" ]

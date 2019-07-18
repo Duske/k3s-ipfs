@@ -15,16 +15,22 @@ spec:
     spec:
       initContainers:
         - name: configure-ipfs
-          image: "ipfs/go-ipfs:v0.4.18"
+          image: "ipfs/go-ipfs:v0.4.21"
           command: ["sh", "/custom/configure-ipfs.sh"]
           volumeMounts:
             - name: ipfs-storage
               mountPath: /data/ipfs
             - name: configure-script
               mountPath: /custom
+          env:
+            - name: IPFS_PEER_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: env-config
+                  key: ipfs-bootstrap-peer-id
       containers:
         - name: ipfs
-          image: "ipfs/go-ipfs:v0.4.18"
+          image: "ipfs/go-ipfs:v0.4.21"
           imagePullPolicy: IfNotPresent
           env:
             - name: IPFS_FD_MAX

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ipfs-companion
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: ipfs-companion
+  template:
+    metadata:
+      labels:
+        name: ipfs-companion
+    spec:
+      containers:
+        - name: goipfs
+          image: ipfs/go-ipfs:v0.4.21
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - |
+              ipfs init
+              ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
+              ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
+              ipfs bootstrap rm --all
+              ipfs  bootstrap add /dns4/${SVC_NAME}-0.${SVC_NAME}/tcp/4001/ipfs/${IPFS_PEER_ID} 
+              ipfs daemon --migrate=true
+          env:
+            - name: SVC_NAME
+              value: "ipfs-cluster"
+            - name: IPFS_FD_MAX
+              value: "4096"
+            - name: IPFS_PEER_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: env-config
+                  key: ipfs-bootstrap-peer-id  
+          ports:
+            - name: swarm
+              protocol: TCP
+              containerPort: 4001
+            - name: swarm-udp
+              protocol: UDP
+              containerPort: 4002
+            - name: api
+              protocol: TCP
+              containerPort: 5001
+              hostPort: 5001
+            - name: ws
+              protocol: TCP
+              containerPort: 8081
+            - name: http
+              protocol: TCP
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /api/v0/id
+              port: api
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10

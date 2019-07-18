@@ -248,14 +248,15 @@ spec:
       labels:
         app: workflow-controller
     spec:
+      hostNetwork: true
       containers:
       - args:
         - --configmap
         - workflow-controller-configmap
-        - --executor-image
-        - argoproj/argoexec:v2.3.0
+
+
         command:
         - workflow-controller
-        image: argoproj/workflow-controller:v2.3.0
+        image: theduske/workflow-controller
         name: workflow-controller
       serviceAccountName: argo
