@@ -69,3 +69,24 @@ You can list the running containers with:
 And list the downloaded images with
 
 `k3s crictl images`
+
+
+### IPFS Cluster
+ipfs-cluster-ctl --host /dns4/ipfs-cluster-0.ipfs-cluster/tcp/9094/  status
+
+read annotation metadata 
+```
+k get pod ipfs-workflowc7j7x-2807610159 -o jsonpath='{.metadata.annotations}'
+```
+
+### Setup self signed certificate
+
+openssl genrsa -des3 -passout pass:x -out server.pass.key 2048
+openssl req -new -key server.key -out server.csr  
+rm server.pass.key
+openssl req -new -key server.key -out server.csr
+# CN has to match host
+openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out server.crt
+
+cp server.crt /etc/ssl/certs/server.pem
+cat server.crt >> /etc/ssl/certs/ca-certificates.crt 

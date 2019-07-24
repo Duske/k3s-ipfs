@@ -13,6 +13,21 @@ spec:
         name: ipfs-companion
     spec:
       containers:
+        - name: ipdr
+          image: theduske/ipdr:https
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: reg
+              protocol: TCP
+              containerPort: 5000
+              hostPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: reg
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
         - name: goipfs
           image: ipfs/go-ipfs:v0.4.21
           imagePullPolicy: IfNotPresent
