@@ -12,10 +12,23 @@ spec:
       labels:
         name: ipfs-companion
     spec:
+      volumes:
+        - name: tls-volume
+          secret:
+            secretName: tls-registry
       containers:
         - name: ipdr
           image: theduske/ipdr:https
           imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: tls-volume
+              readOnly: true
+              mountPath: "/certs"
+          command:
+            - /bin/sh
+            - -c
+            - |
+              ipdr server --tlsKeyPath /certs/tls-registry-key --tlsCrtPath /certs/tls-registry-crt
           ports:
             - name: reg
               protocol: TCP

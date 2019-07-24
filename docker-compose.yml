@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   server:
-    image: k3s-ipfs:0.6.0-0.4.21
+    image: k3s-0.7.0
     build:
       # Path to the Docker file
       context: ./image
@@ -22,7 +22,7 @@ services:
       - cluster
 
   node:
-    image: k3s-ipfs:0.6.0-0.4.21
+    image: k3s-0.7.0
     build:
       # Path to the Docker file
       context: ./image
@@ -41,17 +41,6 @@ services:
       #- IPFS_BOOTSTRAP=/ip4/192.168.65.2/tcp/4001/ipfs/QmTEahS782n8YWvcXvKQGyPqrHJ6WT2AENTwe1ooybRBZi
     networks: 
       - cluster
-
-  ipfsnode:
-    image: ipfs/go-ipfs:v0.4.20
-    environment:
-      - IPFS_PROFILE=local-discovery
-    volumes:
-      - ./ipfsconfig/swarm.key:/data/ipfs/swarm.key
-      - ./ipfsdata:/import
-    networks:
-      - cluster
-
 volumes:
   k3s-server: {}
 

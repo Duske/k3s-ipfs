@@ -1,15 +1,13 @@
 FROM alpine:3.9
 
-RUN apk update && apk add wget fuse tar bash ca-certificates
-RUN wget \
-    https://dist.ipfs.io/go-ipfs/v0.4.21/go-ipfs_v0.4.21_linux-386.tar.gz \
-    https://github.com/rancher/k3s/releases/download/0.6.0/k3s
-RUN tar -xzf go-ipfs_v0.4.21_linux-386.tar.gz && rm go-ipfs_v0.4.21_linux-386.tar.gz
-RUN chmod a+x \
-    go-ipfs/ipfs \
-    k3s
-RUN mkdir /ipfs && mkdir /ipns && mv k3s go-ipfs/ipfs /bin/
-RUN chmod 1777 /tmp
+RUN apk update && \
+    apk add wget bash ca-certificates && \
+    wget https://github.com/rancher/k3s/releases/download/v0.7.0/k3s && \
+    chmod a+x k3s && mv k3s /bin/ && \
+    chmod 1777 /tmp
+
+COPY ./server.crt /usr/local/share/ca-certificates/server.crt
+RUN update-ca-certificates && echo '127.0.0.1    ipfs-companion' >> /etc/hosts
 
 # IPFS Ports
 EXPOSE 4001 
@@ -28,9 +26,10 @@ VOLUME /var/log
 
 RUN mkdir /opt/local-path-provisioner
 
-COPY ./run.sh /
-RUN chmod +x run.sh
-ENTRYPOINT ["./run.sh"]
+# COPY ./run.sh /
+# RUN chmod +x run.sh
+# ENTRYPOINT ["./run.sh"]
+ENTRYPOINT ["/bin/k3s"]
 CMD ["agent"]
 
 #https://github.com/rancher/k3s/releases/download/v0.3.0/k3s
