@@ -82,7 +82,7 @@ k get pod ipfs-workflowc7j7x-2807610159 -o jsonpath='{.metadata.annotations}'
 ### Setup self signed certificate
 
 openssl genrsa -des3 -passout pass:x -out server.pass.key 2048
-openssl req -new -key server.key -out server.csr  
+openssl rsa -passin pass:x -in server.pass.key -out server.key 
 rm server.pass.key
 openssl req -new -key server.key -out server.csr
 # CN has to match host
@@ -90,3 +90,5 @@ openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out serv
 
 cp server.crt /etc/ssl/certs/server.pem
 cat server.crt >> /etc/ssl/certs/ca-certificates.crt 
+
+ k create secret generic tls-registry --from-file=tls-registry-key=server.key --from-file=tls-registry-crt=server.crt

@@ -5,4 +5,4 @@ metadata:
 spec:
   containers:
     - name: ipdr
-      image: ipfs-companion:5000/ciqmw4mig2uwaygddjlutoywq43udutvdmuxkcxvetsjp2mjdde27wi
+      image: ipfs-companion:5000/ciqlarwwgn3qewftxxsapdx6aqi5yi7scootos7m5bqbjuzshoavapa # docker hello-world

@@ -1,0 +1,19 @@
+[plugins.opt]
+path = "{{ .NodeConfig.Containerd.Opt }}"
+
+[plugins.cri]
+stream_server_address = "{{ .NodeConfig.AgentConfig.NodeName }}"
+stream_server_port = "10010"
+  [plugins.cri.cni]
+    bin_dir = "{{ .NodeConfig.AgentConfig.CNIBinDir }}"
+    conf_dir = "{{ .NodeConfig.AgentConfig.CNIConfDir }}"
+
+# "plugins.cri.registry" contains config related to the registry
+  [plugins.cri.registry]
+
+# "plugins.cri.registry.mirrors" are namespace to mirror mapping for all namespaces.
+    [plugins.cri.registry.mirrors]
+      [plugins.cri.registry.mirrors."ipfs-companion:5000"]
+        endpoint = ["http://127.0.0.1:5000"]
+      [plugins.cri.registry.mirrors."docker.io"]
+        endpoint = ["https://registry-1.docker.io"]   

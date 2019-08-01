@@ -13,34 +13,23 @@ spec:
         name: ipfs-companion
     spec:
       volumes:
-        - name: tls-volume
-          secret:
-            secretName: tls-registry
+        - name: ipfs-storage
+          hostPath:
+            path: /data
       containers:
         - name: ipdr
-          image: theduske/ipdr:https
-          imagePullPolicy: IfNotPresent
-          volumeMounts:
-            - name: tls-volume
-              readOnly: true
-              mountPath: "/certs"
+          image: theduske/ipdr:containerd
+          imagePullPolicy: Always
           command:
             - /bin/sh
             - -c
             - |
-              ipdr server --tlsKeyPath /certs/tls-registry-key --tlsCrtPath /certs/tls-registry-crt
+              ipdr server --ipfs-gateway https://127.0.0.1:8080
           ports:
             - name: reg
               protocol: TCP
               containerPort: 5000
               hostPort: 5000
-          readinessProbe:
-            httpGet:
-              path: /
-              port: reg
-            initialDelaySeconds: 60
-            periodSeconds: 30
-            timeoutSeconds: 10
         - name: goipfs
           image: ipfs/go-ipfs:v0.4.21
           imagePullPolicy: IfNotPresent
@@ -63,7 +52,10 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: env-config
-                  key: ipfs-bootstrap-peer-id  
+                  key: ipfs-bootstrap-peer-id
+          volumeMounts:
+            - name: ipfs-storage
+              mountPath: /data/ipfs
           ports:
             - name: swarm
               protocol: TCP
@@ -74,13 +66,14 @@ spec:
             - name: api
               protocol: TCP
               containerPort: 5001
-              hostPort: 5001
+              hostPort: 5555
             - name: ws
               protocol: TCP
               containerPort: 8081
             - name: http
               protocol: TCP
               containerPort: 8080
+              hostPort: 8555
           readinessProbe:
             httpGet:
               path: /api/v0/id

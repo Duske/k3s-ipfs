@@ -1,31 +1,26 @@
 version: '3.5'
 services:
   server:
-    image: k3s-0.7.0
-    build:
-      # Path to the Docker file
-      context: ./image
+    image: rancher/k3s:v0.7.0
     command: "server --kubelet-arg='address=0.0.0.0' --no-deploy traefik" #--disable-agent
     privileged: true
     environment:
       - K3S_CLUSTER_SECRET=test
       - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig.yaml
       - K3S_KUBECONFIG_MODE=666
-      #- IPFS_BOOTSTRAP=/ip4/192.168.65.2/tcp/4001/ipfs/QmTEahS782n8YWvcXvKQGyPqrHJ6WT2AENTwe1ooybRBZi
+      - CONTAINERD_LOG_LEVEL=debug
     volumes:
       - k3s-server:/var/lib/rancher/k3s
+      - ./image/config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
       - .:/output
-      - ./ipfsconfig/swarm.key:/root/.ipfs/swarm.key
     ports:
       - 6443:6443
+      - 5555:5555 # IPDR PORT for pushing images
     networks: 
       - cluster
 
   node:
-    image: k3s-0.7.0
-    build:
-      # Path to the Docker file
-      context: ./image
+    image: rancher/k3s:v0.7.0
     tmpfs:
       - /run
       - /var/run
@@ -35,10 +30,11 @@ services:
       - server
     volumes:
       - ./ipfsconfig/swarm.key:/root/.ipfs/swarm.key
+      - ./image/config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
     environment:
       - K3S_URL=https://server:6443
       - K3S_CLUSTER_SECRET=test
-      #- IPFS_BOOTSTRAP=/ip4/192.168.65.2/tcp/4001/ipfs/QmTEahS782n8YWvcXvKQGyPqrHJ6WT2AENTwe1ooybRBZi
+      - CONTAINERD_LOG_LEVEL=debug
     networks: 
       - cluster
 volumes:
