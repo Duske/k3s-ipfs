@@ -77,7 +77,7 @@ spec:
           resources:
             {}
         - name: ipfs-cluster
-          image: "ipfs/ipfs-cluster:latest"
+          image: "ipfs/ipfs-cluster:v0.11.0-rc4"
           imagePullPolicy: IfNotPresent
           command: ["sh", "/custom/entrypoint.sh"]
           # envFrom:
