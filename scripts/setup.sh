@@ -18,3 +18,6 @@ kubectl create namespace argo
 kubectl -n argo apply -f setup/argo
 # https://github.com/argoproj/argo/issues/1410
 kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=default:default
+
+## IPFS
+kubectl apply -f setup/ipfs-cluster
