@@ -15,7 +15,7 @@ services:
       - .:/output
     ports:
       - 6443:6443
-      - 5555:5555 # IPDR PORT for pushing images
+      - 5001:5001 # IPDR PORT for pushing images
     networks: 
       - cluster
 
