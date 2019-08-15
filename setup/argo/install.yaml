@@ -253,8 +253,8 @@ spec:
       - args:
         - --configmap
         - workflow-controller-configmap
-
-
+        - --executor-image
+        - theduske/argoexec
         command:
         - workflow-controller
         image: theduske/workflow-controller
