@@ -16,6 +16,9 @@ spec:
         - name: ipfs-storage
           hostPath:
             path: /data
+        - name: secrets
+          secret:
+            secretName: secret-config
       containers:
         - name: ipdr
           image: theduske/ipdr:containerd
@@ -40,6 +43,7 @@ spec:
               ipfs init
               ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
               ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
+              cp /secrets/swarm.key /data/ipfs/swarm.key
               ipfs bootstrap rm --all
               ipfs  bootstrap add /dns4/${SVC_NAME}-0.${SVC_NAME}/tcp/4001/ipfs/${IPFS_PEER_ID} 
               ipfs daemon --migrate=true
@@ -53,9 +57,17 @@ spec:
                 configMapKeyRef:
                   name: env-config
                   key: ipfs-bootstrap-peer-id
+            - name: IPFS_SWARM_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secret-config
+                  key: swarm.key
           volumeMounts:
             - name: ipfs-storage
               mountPath: /data/ipfs
+            - name: secrets
+              mountPath: /secrets
+              readOnly: true  
           ports:
             - name: swarm
               protocol: TCP

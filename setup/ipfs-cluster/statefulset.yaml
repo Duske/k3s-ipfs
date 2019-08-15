@@ -22,6 +22,9 @@ spec:
               mountPath: /data/ipfs
             - name: configure-script
               mountPath: /custom
+            - name: secrets
+              mountPath: /secrets
+              readOnly: true
           env:
             - name: IPFS_PEER_ID
               valueFrom:
@@ -135,6 +138,9 @@ spec:
             {}
 
       volumes:
+      - name: secrets
+        secret:
+          secretName: secret-config
       - name: configure-script
         configMap:
           name: ipfs-cluster-set-bootstrap-conf

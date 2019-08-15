@@ -44,6 +44,7 @@ data:
     # setup for production scenarios.
 
     mkdir -p /data/ipfs && chown -R ipfs /data/ipfs
+    cp /secrets/swarm.key /data/ipfs/swarm.key
 
     if [ -f /data/ipfs/config ]; then
       if [ -f /data/ipfs/repo.lock ]; then
