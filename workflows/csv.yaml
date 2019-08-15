@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: csv-ipfs-workflow
+spec:
+  entrypoint: csv-meta
+  templates:
+  - name: csv-meta
+    dag:
+      tasks:
+      - name: csv-meta
+        template: csv-meta-template
+        arguments:
+          artifacts:
+          - name: csv-file
+            ipfs: 
+              hash: "QmWXewDScLnXnhXMKVpu4x1WMB5129mqg5zC5BMmM5rajb" # sales records
+
+  - name: csv-meta-template
+    container:
+      image: ipfs-companion:5000/ciqai2kqs7pwe5wd2by3nznmkfv7gtzbh25iaqjjminzlja3wjq32yy
+      command: [sh, -c]
+      args: ["npm start /data.csv"]
+    inputs:
+      artifacts:
+      - name: csv-file
+        path: /data.csv
+    outputs:
+      artifacts:
+      - name: message
+        path: /usr/src/app/result.json
+        ipfs:
+          storageEndpoint: "http://ipfs-cluster:9094/add"
