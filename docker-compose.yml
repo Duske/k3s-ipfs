@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   server:
-    image: rancher/k3s:v0.7.0
+    image: rancher/k3s:v0.8.0
     command: "server --kubelet-arg='address=0.0.0.0' --no-deploy traefik" #--disable-agent
     privileged: true
     environment:
@@ -20,7 +20,7 @@ services:
       - cluster
 
   node:
-    image: rancher/k3s:v0.7.0
+    image: rancher/k3s:v0.8.0
     tmpfs:
       - /run
       - /var/run
