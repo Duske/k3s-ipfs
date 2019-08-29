@@ -11,7 +11,7 @@ services:
       - CONTAINERD_LOG_LEVEL=debug
     volumes:
       - k3s-server:/var/lib/rancher/k3s
-      - ./config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+      - ./setup/config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
       - .:/output
     ports:
       - 6443:6443
@@ -30,8 +30,7 @@ services:
     depends_on:
       - server
     volumes:
-      - ./ipfsconfig/swarm.key:/root/.ipfs/swarm.key
-      - ./config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+      - ./setup/config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
       - ./worker_data:/worker_data
     environment:
       - K3S_URL=https://server:6443
@@ -42,4 +41,5 @@ services:
 volumes:
   k3s-server: {}
 
-networks: cluster:
+networks: 
+  cluster:
