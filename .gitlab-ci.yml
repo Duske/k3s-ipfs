@@ -47,3 +47,16 @@ build-text-core-phrase-extractor:
       - master
     changes:
       - profiling-images/text-core-phrase-extractor/*
+
+build-text-statistican:
+  stage: build
+  script:
+    - docker build -t registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-statistican profiling-images/text-statistican
+    - docker push registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-statistican
+  tags:
+    - asprunner
+  only:
+    refs:
+      - master
+    changes:
+      - profiling-images/text-statistican/*
