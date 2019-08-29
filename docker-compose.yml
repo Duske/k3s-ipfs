@@ -16,6 +16,7 @@ services:
     ports:
       - 6443:6443
       - 5001:5001 # IPDR PORT for pushing images
+      - 8555:8555 # IPDR PORT for pushing images
     networks: 
       - cluster
 
@@ -31,6 +32,7 @@ services:
     volumes:
       - ./ipfsconfig/swarm.key:/root/.ipfs/swarm.key
       - ./image/config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+      - ./worker_data:/worker_data
     environment:
       - K3S_URL=https://server:6443
       - K3S_CLUSTER_SECRET=test

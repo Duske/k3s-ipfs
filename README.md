@@ -53,13 +53,6 @@ k -n argo port-forward deployment/argo-ui 8001:8001
 argo submit --kubeconfig kubeconfig.yaml --watch workflows/hello-world.yaml
 ```
 
-## IPFS
-
-### Add files to private network
-
-1. Place them into `./ipfsdata`
-2. run `docker-compose exec ipfsnode ipfs add -r /import`
-
 ## k3s
 
 You can list the running containers with:
@@ -79,16 +72,4 @@ read annotation metadata
 k get pod ipfs-workflowc7j7x-2807610159 -o jsonpath='{.metadata.annotations}'
 ```
 
-### Setup self signed certificate
-
-openssl genrsa -des3 -passout pass:x -out server.pass.key 2048
-openssl rsa -passin pass:x -in server.pass.key -out server.key 
-rm server.pass.key
-openssl req -new -key server.key -out server.csr
-# CN has to match host
-openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out server.crt
-
-cp server.crt /etc/ssl/certs/server.pem
-cat server.crt >> /etc/ssl/certs/ca-certificates.crt 
-
- k create secret generic tls-registry --from-file=tls-registry-key=server.key --from-file=tls-registry-crt=server.crt
+/Users/dchabrowski/Dev/Go/src/github.com/argoproj/argo/dist/argo submit --kubeconfig /Users/dchabrowski/Dev/Uni/MA/k3s-ipfs/kubeconfig.yaml --watch workflows/csv_host_data.yaml --receipt

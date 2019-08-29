@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx-pd
-spec:
-  containers:
-    - name: ipdr
-      image: ipfs-companion:5000/ciqlarwwgn3qewftxxsapdx6aqi5yi7scootos7m5bqbjuzshoavapa # docker hello-world

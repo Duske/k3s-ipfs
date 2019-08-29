@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: csv-ipfs-workflow
+spec:
+  entrypoint: csv-meta
+  templates:
+  - name: csv-meta
+    dag:
+      tasks:
+      - name: csv-meta
+        template: csv-meta-template
+
+  - name: csv-meta-template
+    nodeSelector:
+      node-role.kubernetes.io/worker: true
+    container:
+      image: ipfs-companion:5000/ciqai2kqs7pwe5wd2by3nznmkfv7gtzbh25iaqjjminzlja3wjq32yy
+      command: [sh, -c]
+      args: ["npm start /worker_data/hurricanes.csv"]
+      volumeMounts:
+        - mountPath: /worker_data
+          name: datavol
+    volumes:
+    - name: datavol
+      hostPath:
+        path: /worker_data
+        type: Directory
+    outputs:
+      artifacts:
+      - name: message
+        path: /usr/src/app/result.json
+        ipfs:
+          storageEndpoint: "http://ipfs-cluster:9094/add"
