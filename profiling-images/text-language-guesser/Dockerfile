@@ -1,4 +1,4 @@
-FROM registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/base-node-java
+FROM node:10.15.0-alpine
 MAINTAINER Dustin Chabrowski <dustin.chabrowski@isst.fraunhofer.de>
 
 ARG proxy

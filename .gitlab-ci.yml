@@ -21,3 +21,16 @@ build-text-metadata-extractor:
       - master
     changes:
       - profiling-images/text-metadata-extractor/*
+
+build-text-language-guesser:
+  stage: build
+  script:
+    - docker build -t registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser profiling-images/text-language-guesser
+    - docker push registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser
+  tags:
+    - asprunner
+  only:
+    refs:
+      - master
+    changes:
+      - profiling-images/text-language-guesser/*
