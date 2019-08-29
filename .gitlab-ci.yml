@@ -9,7 +9,7 @@ variables:
 stages:
   - build
 
-build-datalayer:
+build-text-metadata-extractor:
   stage: build
   script:
     - docker build -t registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-metadata-extractor profiling-images/text-metadata-extractor
