@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: text-analysis
+spec:
+  entrypoint: extract-data
+  templates:
+  - name: extract-data
+    dag:
+      tasks:
+      - name: extract-data
+        template: extract-data-template
+
+  - name: extract-data-template
+    nodeSelector:
+      node-role.kubernetes.io/worker: true
+    container:
+      # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-metadata-extractor:latest
+      image: ipfs-companion:5000/ciqmjrloulgan5nvknwkekuukcck2cp2tab5x2uvjhj3f325t3genxa
+      command: [sh, -c]
+      args: ["npm start /worker_data/faust.txt"]
+      volumeMounts:
+        - mountPath: /worker_data
+          name: datavol
+    volumes:
+    - name: datavol
+      hostPath:
+        path: /worker_data
+        type: Directory
+    outputs:
+      artifacts:
+      - name: meta
+        path: /usr/src/app/meta.json
+        ipfs:
+          storageEndpoint: "http://ipfs-cluster:9094/add"
+      - name: content
+        path: /usr/src/app/text.txt
+        ipfs:
+          storageEndpoint: "http://ipfs-cluster:9094/add"
