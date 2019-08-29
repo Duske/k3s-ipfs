@@ -72,18 +72,18 @@ spec:
           storageEndpoint: "http://ipfs-cluster:9094/add"
 
   - name: core-phrases
-      container:
-        # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser
-        image: ipfs-companion:5000/ciqfhhzayced47yof4k2cp5apxdvtqg5jihq6qampdijdfy7zrcahfq
-        command: [sh, -c]
-        args: ["npm start /tmp/text"]
-      inputs:
-        artifacts:
-        - name: text
-          path: /tmp/text
-      outputs:
-        artifacts:
-        - name: core-phrases
-          path: /usr/src/app/corePhrases.json
-          ipfs:
-            storageEndpoint: "http://ipfs-cluster:9094/add"
+    container:
+      # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser
+      image: ipfs-companion:5000/ciqk6evg3tunp6tsv6xparhx544gjnoaitlsqt66ughybwwzmivboci
+      command: [sh, -c]
+      args: ["npm start /tmp/text"]
+    inputs:
+      artifacts:
+      - name: text
+        path: /tmp/text
+    outputs:
+      artifacts:
+      - name: core-phrases
+        path: /usr/src/app/corePhrases.json
+        ipfs:
+          storageEndpoint: "http://ipfs-cluster:9094/add"
