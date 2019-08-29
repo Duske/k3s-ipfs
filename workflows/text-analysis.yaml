@@ -34,7 +34,7 @@ spec:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-metadata-extractor:latest
       image: ipfs-companion:5000/ciqmjrloulgan5nvknwkekuukcck2cp2tab5x2uvjhj3f325t3genxa
       command: [sh, -c]
-      args: ["npm start /worker_data/faust.txt"]
+      args: ["npm start /worker_data/simplex.pdf"]
       volumeMounts:
         - mountPath: /worker_data
           name: datavol
