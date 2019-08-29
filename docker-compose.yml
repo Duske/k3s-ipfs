@@ -1,7 +1,7 @@
-version: '3.5'
+version: "3.5"
 services:
   server:
-    image: rancher/k3s:v0.8.0
+    image: rancher/k3s:v0.8.1
     command: "server --kubelet-arg='address=0.0.0.0' --no-deploy traefik" #--disable-agent
     privileged: true
     environment:
@@ -11,17 +11,17 @@ services:
       - CONTAINERD_LOG_LEVEL=debug
     volumes:
       - k3s-server:/var/lib/rancher/k3s
-      - ./image/config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+      - ./config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
       - .:/output
     ports:
       - 6443:6443
       - 5001:5001 # IPDR PORT for pushing images
       - 8555:8555 # IPDR PORT for pushing images
-    networks: 
+    networks:
       - cluster
 
   node:
-    image: rancher/k3s:v0.8.0
+    image: rancher/k3s:v0.8.1
     tmpfs:
       - /run
       - /var/run
@@ -31,16 +31,15 @@ services:
       - server
     volumes:
       - ./ipfsconfig/swarm.key:/root/.ipfs/swarm.key
-      - ./image/config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+      - ./config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
       - ./worker_data:/worker_data
     environment:
       - K3S_URL=https://server:6443
       - K3S_CLUSTER_SECRET=test
       - CONTAINERD_LOG_LEVEL=debug
-    networks: 
+    networks:
       - cluster
 volumes:
   k3s-server: {}
 
-networks:
-  cluster:
+networks: cluster:

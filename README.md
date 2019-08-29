@@ -73,3 +73,8 @@ k get pod ipfs-workflowc7j7x-2807610159 -o jsonpath='{.metadata.annotations}'
 ```
 
 /Users/dchabrowski/Dev/Go/src/github.com/argoproj/argo/dist/argo submit --kubeconfig /Users/dchabrowski/Dev/Uni/MA/k3s-ipfs/kubeconfig.yaml --watch workflows/csv_host_data.yaml --receipt
+
+## IPDR 
+
+Push image to IPDR
+`ipdr push --ipfs-host 127.0.0.1:5001 csv-meta`
