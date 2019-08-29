@@ -1,0 +1,23 @@
+image: docker:stable
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - build
+
+build-datalayer:
+  stage: build
+  script:
+    - docker build -t registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-metadata-extractor profiling-images/text-metadata-extractor
+    - docker push registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-metadata-extractor
+  tags:
+    - asprunner
+  only:
+    refs:
+      - master
+    changes:
+      - profiling-images/text-metadata-extractor/*
