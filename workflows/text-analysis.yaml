@@ -10,6 +10,15 @@ spec:
       tasks:
       - name: extract-data
         template: extract-data-template
+      
+      - name: guess-language
+        dependencies: [extract-data]
+        template: guess-language
+        arguments:
+          artifacts:
+          - name: text
+            from: "{{tasks.extract-data.outputs.artifacts.content}}" 
+
 
   - name: extract-data-template
     nodeSelector:
@@ -35,5 +44,21 @@ spec:
           storageEndpoint: "http://ipfs-cluster:9094/add"
       - name: content
         path: /usr/src/app/text.txt
+        ipfs:
+          storageEndpoint: "http://ipfs-cluster:9094/add"
+  - name: guess-language
+    container:
+      # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser
+      image: ipfs-companion:5000/ciqfhhzayced47yof4k2cp5apxdvtqg5jihq6qampdijdfy7zrcahfq
+      command: [sh, -c]
+      args: ["npm start /tmp/text"]
+    inputs:
+      artifacts:
+      - name: text
+        path: /tmp/text
+    outputs:
+      artifacts:
+      - name: language
+        path: /usr/src/app/language.json
         ipfs:
           storageEndpoint: "http://ipfs-cluster:9094/add"
