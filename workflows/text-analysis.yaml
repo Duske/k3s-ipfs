@@ -18,7 +18,14 @@ spec:
           artifacts:
           - name: text
             from: "{{tasks.extract-data.outputs.artifacts.content}}" 
-
+      
+      - name: core-phrases
+        dependencies: [extract-data]
+        template: core-phrases
+        arguments:
+          artifacts:
+          - name: text
+            from: "{{tasks.extract-data.outputs.artifacts.content}}" 
 
   - name: extract-data-template
     nodeSelector:
@@ -46,6 +53,7 @@ spec:
         path: /usr/src/app/text.txt
         ipfs:
           storageEndpoint: "http://ipfs-cluster:9094/add"
+
   - name: guess-language
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser
@@ -62,3 +70,20 @@ spec:
         path: /usr/src/app/language.json
         ipfs:
           storageEndpoint: "http://ipfs-cluster:9094/add"
+
+  - name: core-phrases
+      container:
+        # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser
+        image: ipfs-companion:5000/ciqfhhzayced47yof4k2cp5apxdvtqg5jihq6qampdijdfy7zrcahfq
+        command: [sh, -c]
+        args: ["npm start /tmp/text"]
+      inputs:
+        artifacts:
+        - name: text
+          path: /tmp/text
+      outputs:
+        artifacts:
+        - name: core-phrases
+          path: /usr/src/app/corePhrases.json
+          ipfs:
+            storageEndpoint: "http://ipfs-cluster:9094/add"
