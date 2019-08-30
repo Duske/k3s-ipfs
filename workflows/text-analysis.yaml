@@ -99,7 +99,7 @@ spec:
   - name: stats
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-statistican
-      image: ipfs-companion:5000/ciqkqijzlo4wmhshicmr5h7ng3275e6ggs4hmrfreie2vuloryurksi
+      image: ipfs-companion:5000/ciqkmfhfgokdvvbpqbaiskatcemtyq3qcwirgnvkj5g2oawmmuc5vbq
       command: [sh, -c]
       args: ["npm start /tmp/text"]
     inputs:
