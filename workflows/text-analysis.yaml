@@ -43,6 +43,22 @@ spec:
           - name: text
             from: "{{tasks.extract-data.outputs.artifacts.content}}" 
 
+      - name: merger
+        dependencies: [guess-language, stats, keywords, core-phrases]
+        template: merger
+        arguments:
+          artifacts:
+          - name: meta
+            from: "{{tasks.extract-data.outputs.artifacts.meta}}"  
+          - name: language
+            from: "{{tasks.guess-language.outputs.artifacts.language}}"
+          - name: stats
+            from: "{{tasks.stats.outputs.artifacts.stats}}"   
+          - name: keywords
+            from: "{{tasks.keywords.outputs.artifacts.keywords}}"   
+          - name: core-phrases
+            from: "{{tasks.core-phrases.outputs.artifacts.core-phrases}}"       
+
   - name: extract-data-template
     nodeSelector:
       node-role.kubernetes.io/worker: true
@@ -135,5 +151,30 @@ spec:
       artifacts:
       - name: keywords
         path: /usr/src/app/keywords.json
+        ipfs:
+          storageEndpoint: "http://ipfs-cluster:9094/add"
+
+  - name: merger
+    container:
+      # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/json-merger
+      image: ipfs-companion:5000/ciqkfhqo7lychgh3olbky2wd7ocz3nttotjeql4qma5ot2jdbpgx7iq
+      command: [sh, -c]
+      args: ["npm start /tmp/jsons"]
+    inputs:
+      artifacts:
+      - name: meta
+        path: /tmp/jsons/meta.json
+      - name: core-phrases
+        path: /tmp/jsons/core-phrases.json
+      - name: stats
+        path: /tmp/jsons/stats.json
+      - name: keywords
+        path: /tmp/jsons/keywords.json
+      - name: language
+        path: /tmp/jsons/language.json
+    outputs:
+      artifacts:
+      - name: keywords
+        path: /usr/src/app/result.json
         ipfs:
           storageEndpoint: "http://ipfs-cluster:9094/add"

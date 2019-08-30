@@ -90,4 +90,6 @@ ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/d
 ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-statistican
 
 ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-keyword-extractor
+
+ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/json-merger
 ```
