@@ -10,7 +10,7 @@ ENV https_proxy="$sproxy"
 ENV no_proxy="$noproxy"
 
 RUN apk add py3-lxml
-RUN pip install nltk sumy &&  python -c "import nltk; nltk.download('tokenize')"
+RUN pip install nltk sumy &&  python -c "import nltk; nltk.download('punkt')"
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app

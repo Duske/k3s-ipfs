@@ -78,3 +78,14 @@ k get pod ipfs-workflowc7j7x-2807610159 -o jsonpath='{.metadata.annotations}'
 
 Push image to IPDR
 `ipdr push --ipfs-host 127.0.0.1:5001 csv-meta`
+
+
+```
+ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-core-phrase-extractor
+
+ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser
+
+ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-metadata-extractor:latest
+
+ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-statistican
+```

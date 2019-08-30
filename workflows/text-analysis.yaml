@@ -27,6 +27,14 @@ spec:
           - name: text
             from: "{{tasks.extract-data.outputs.artifacts.content}}" 
 
+      - name: stats
+        dependencies: [extract-data]
+        template: stats
+        arguments:
+          artifacts:
+          - name: text
+            from: "{{tasks.extract-data.outputs.artifacts.content}}" 
+
   - name: extract-data-template
     nodeSelector:
       node-role.kubernetes.io/worker: true
@@ -85,5 +93,22 @@ spec:
       artifacts:
       - name: core-phrases
         path: /usr/src/app/corePhrases.json
+        ipfs:
+          storageEndpoint: "http://ipfs-cluster:9094/add"
+
+  - name: stats
+    container:
+      # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-statistican
+      image: ipfs-companion:5000/ciqkqijzlo4wmhshicmr5h7ng3275e6ggs4hmrfreie2vuloryurksi
+      command: [sh, -c]
+      args: ["npm start /tmp/text"]
+    inputs:
+      artifacts:
+      - name: text
+        path: /tmp/text
+    outputs:
+      artifacts:
+      - name: stats
+        path: /usr/src/app/stats.json
         ipfs:
           storageEndpoint: "http://ipfs-cluster:9094/add"
