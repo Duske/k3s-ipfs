@@ -73,3 +73,16 @@ build-text-keyword-extractor:
       - master
     changes:
       - profiling-images/text-keyword-extractor/*
+
+build-json-merger:
+  stage: build
+  script:
+    - docker build -t registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/json-merger profiling-images/json-merger
+    - docker push registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/json-merger
+  tags:
+    - asprunner
+  only:
+    refs:
+      - master
+    changes:
+      - profiling-images/json-merger/*
