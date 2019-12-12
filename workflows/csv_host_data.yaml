@@ -13,7 +13,7 @@ spec:
 
   - name: csv-meta-template
     nodeSelector:
-      node-role.kubernetes.io/worker: true
+      worker: true
     container:
       image: ipfs-companion:5000/ciqai2kqs7pwe5wd2by3nznmkfv7gtzbh25iaqjjminzlja3wjq32yy
       command: [sh, -c]

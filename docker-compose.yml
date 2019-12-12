@@ -1,8 +1,8 @@
 version: "3.5"
 services:
   server:
-    image: rancher/k3s:v0.8.1
-    command: "server --kubelet-arg='address=0.0.0.0' --no-deploy traefik" #--disable-agent
+    image: rancher/k3s:v1.0.0
+    command: "server --kubelet-arg='address=0.0.0.0' --no-deploy traefik --disable-agent"
     privileged: true
     environment:
       - K3S_CLUSTER_SECRET=test
@@ -11,26 +11,46 @@ services:
       - CONTAINERD_LOG_LEVEL=debug
     volumes:
       - k3s-server:/var/lib/rancher/k3s
-      - ./setup/config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+      - ./setup/registries.yaml:/etc/rancher/k3s/registries.yaml
       - .:/output
     ports:
       - 6443:6443
+    networks:
+      - cluster
+
+  node1:
+    image: rancher/k3s:v1.0.0
+    tmpfs:
+      - /run
+      - /var/run
+    privileged: true
+    command: "agent --node-label worker=true --kubelet-arg='eviction-hard=imagefs.available<5%,nodefs.available<5%,memory.available<6000Mi'"
+    depends_on:
+      - server
+    volumes:
+      - ./setup/registries.yaml:/etc/rancher/k3s/registries.yaml
+      - ./worker_data:/worker_data
+    environment:
+      - K3S_URL=https://server:6443
+      - K3S_CLUSTER_SECRET=test
+      - CONTAINERD_LOG_LEVEL=debug
+    ports:
       - 5001:5001 # IPDR PORT for pushing images
       - 8555:8555 # IPDR PORT for pushing images
     networks:
       - cluster
 
-  node:
-    image: rancher/k3s:v0.8.1
+  node2:
+    image: rancher/k3s:v1.0.0
     tmpfs:
       - /run
       - /var/run
     privileged: true
-    command: "agent --kubelet-arg='eviction-hard=imagefs.available<5%,nodefs.available<5%,memory.available<6000Mi'"
+    command: "agent --node-label worker=true --kubelet-arg='eviction-hard=imagefs.available<5%,nodefs.available<5%,memory.available<6000Mi'"
     depends_on:
       - server
     volumes:
-      - ./setup/config.toml.tmpl:/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+      - ./setup/registries.yaml:/etc/rancher/k3s/registries.yaml
       - ./worker_data:/worker_data
     environment:
       - K3S_URL=https://server:6443
@@ -38,6 +58,7 @@ services:
       - CONTAINERD_LOG_LEVEL=debug
     networks:
       - cluster
+
 volumes:
   k3s-server: {}
 
