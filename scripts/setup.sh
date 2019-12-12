@@ -15,7 +15,7 @@ kubectl apply -f setup/dashboard
 
 ## Argo
 kubectl create namespace argo
-kubectl -n argo apply -f setup/argo
+kubectl -n argo apply -f setup/argo/install.yaml
 # https://github.com/argoproj/argo/issues/1410
 kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=default:default
 
