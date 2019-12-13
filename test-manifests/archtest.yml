@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: arch-companion
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: arch-companion
+  template:
+    metadata:
+      labels:
+        name: arch-companion
+    spec:
+      containers:
+        - name: tst
+          image: ckulka/multi-arch-example
+          imagePullPolicy: Always
