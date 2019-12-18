@@ -93,3 +93,13 @@ ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/d
 
 ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/json-merger
 ```
+
+
+## Multiarch images
+
+* Enable docker experimental features for multiarch goodness
+* `docker buildx create --name mybuilder      `
+* `docker buildx use mybuilder --bootstrap`
+* `docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7  -o type=oci,dest=- . > image.tar`
+* manual prep: `ipfs add -r image/`
+* ipdr: `ipdr push --oci image.tar`

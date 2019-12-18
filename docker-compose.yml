@@ -2,7 +2,7 @@ version: "3.5"
 services:
   server:
     image: rancher/k3s:v1.0.0
-    command: "server --kubelet-arg='address=0.0.0.0' --no-deploy traefik --disable-agent"
+    command: "server --kubelet-arg='address=0.0.0.0' --no-deploy traefik --disable-agent --node-external-ip 192.168.0.143"
     privileged: true
     environment:
       - K3S_CLUSTER_SECRET=test
@@ -35,6 +35,7 @@ services:
       - K3S_CLUSTER_SECRET=test
       - CONTAINERD_LOG_LEVEL=debug
     ports:
+      - 5000:5000 # IPDR PORT for pushing images
       - 5001:5001 # IPDR PORT for pushing images
       - 8555:8555 # IPDR PORT for pushing images
     networks:

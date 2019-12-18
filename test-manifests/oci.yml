@@ -1,0 +1,23 @@
+# Test daemon set to check if containerd works with multiarch images
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: oci-companion
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: oci-companion
+  template:
+    metadata:
+      labels:
+        name: oci-companion
+    spec:
+      #nodeSelector:
+        #beta.kubernetes.io/arch: amd64
+      containers:
+        - name: tst
+          image: theduske/ipdr:oci
+          imagePullPolicy: Always
+          command: ["tail"]
+          args: ["-f", "/dev/null"]

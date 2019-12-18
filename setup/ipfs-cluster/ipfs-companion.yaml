@@ -21,20 +21,20 @@ spec:
             secretName: secret-config
       containers:
         - name: ipdr
-          image: theduske/ipdr:containerd
+          image: theduske/ipdr:oci
           imagePullPolicy: Always
           command:
             - /bin/sh
             - -c
             - |
-              ipdr server --ipfs-gateway https://127.0.0.1:8080
+              /app/ipdr server --ipfs-gateway https://127.0.0.1:8080
           ports:
             - name: reg
               protocol: TCP
               containerPort: 5000
               hostPort: 5000
         - name: goipfs
-          image: ipfs/go-ipfs:v0.4.21
+          image: theduske/ipfs-multiarch:v0.4.22
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
