@@ -61,10 +61,11 @@ spec:
 
   - name: extract-data-template
     nodeSelector:
-      node-role.kubernetes.io/worker: true
+      kubernetes.io/arch: amd64
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-metadata-extractor:latest
-      image: ipfs-companion:5000/ciqmjrloulgan5nvknwkekuukcck2cp2tab5x2uvjhj3f325t3genxa
+      #image: ipfs-companion:5000/ciqmjrloulgan5nvknwkekuukcck2cp2tab5x2uvjhj3f325t3genxa
+      image: ipfs-companion:5000/ciqj63vremmyb5ejhppgezw4cse7bpwpc5ljmjoa4ccq4d6n2viyn3i
       command: [sh, -c]
       args: ["npm start /worker_data/simplex.pdf"]
       volumeMounts:
@@ -89,7 +90,8 @@ spec:
   - name: guess-language
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser
-      image: ipfs-companion:5000/ciqfhhzayced47yof4k2cp5apxdvtqg5jihq6qampdijdfy7zrcahfq
+      #image: ipfs-companion:5000/ciqfhhzayced47yof4k2cp5apxdvtqg5jihq6qampdijdfy7zrcahfq
+      image: ipfs-companion:5000/ciqg4lxdbh7hhvurfgpj3qd25tgurqm4np5o6dv27kqqosipl33djwy
       command: [sh, -c]
       args: ["npm start /tmp/text"]
     inputs:
@@ -106,7 +108,8 @@ spec:
   - name: core-phrases
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser
-      image: ipfs-companion:5000/ciqk6evg3tunp6tsv6xparhx544gjnoaitlsqt66ughybwwzmivboci
+      #image: ipfs-companion:5000/ciqk6evg3tunp6tsv6xparhx544gjnoaitlsqt66ughybwwzmivboci
+      image: ipfs-companion:5000/ciqhltllz22exjtvaewegwm2j7lvwivfvdoqctu2533iiguaxatuffy
       command: [sh, -c]
       args: ["npm start /tmp/text"]
     inputs:
@@ -123,7 +126,8 @@ spec:
   - name: stats
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-statistican
-      image: ipfs-companion:5000/ciqkmfhfgokdvvbpqbaiskatcemtyq3qcwirgnvkj5g2oawmmuc5vbq
+      #image: ipfs-companion:5000/ciqkmfhfgokdvvbpqbaiskatcemtyq3qcwirgnvkj5g2oawmmuc5vbq
+      image: ipfs-companion:5000/ciqht7ngf623ci74zzysid7go4djty3qath6hlg2isapm5mxwrvk45y
       command: [sh, -c]
       args: ["npm start /tmp/text"]
     inputs:
@@ -140,7 +144,8 @@ spec:
   - name: keywords
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-keyword-extractor
-      image: ipfs-companion:5000/ciqolgnteqxgsfzsq6ix3dsjoc7gldypfljbutedf273uaq4ntdbtri
+      #image: ipfs-companion:5000/ciqolgnteqxgsfzsq6ix3dsjoc7gldypfljbutedf273uaq4ntdbtri
+      image: ipfs-companion:5000/ciqlg4d4mqa5nrlx6w6v6tw27cwawxbyeyzfkxktbz75w5fy5mtqn5y
       command: [sh, -c]
       args: ["npm start /tmp/text"]
     inputs:
@@ -157,7 +162,8 @@ spec:
   - name: merger
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/json-merger
-      image: ipfs-companion:5000/ciqkfhqo7lychgh3olbky2wd7ocz3nttotjeql4qma5ot2jdbpgx7iq
+      #image: ipfs-companion:5000/ciqkfhqo7lychgh3olbky2wd7ocz3nttotjeql4qma5ot2jdbpgx7iq
+      image: ipfs-companion:5000/ciqlac22jq52uuqbrm37zx7vsbdgillsyyxx7v7wwjto7fx734j56sa
       command: [sh, -c]
       args: ["npm start /tmp/jsons"]
     inputs:

@@ -103,3 +103,14 @@ ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/d
 * `docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7  -o type=oci,dest=- . > image.tar`
 * manual prep: `ipfs add -r image/`
 * ipdr: `ipdr push --oci image.tar`
+
+### OCI Images
+
+```
+  ipdr push-oci profiling-images/json-merger/json-merger.tar
+  ipdr push-oci profiling-images/text-core-phrase-extractor/text-core-phrase-extractor.tar
+  ipdr push-oci profiling-images/text-keyword-extractor/text-keyword-extractor.tar
+  ipdr push-oci profiling-images/text-statistican/text-statistican.tar
+  ipdr push-oci profiling-images/text-language-guesser/text-language-guesser.tar
+  ipdr push-oci profiling-images/text-metadata-extractor/text-metadata-extractor.tar
+```
