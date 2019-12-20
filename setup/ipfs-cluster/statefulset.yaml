@@ -15,7 +15,7 @@ spec:
     spec:
       initContainers:
         - name: configure-ipfs
-          image: "ipfs/go-ipfs:v0.4.21"
+          image: theduske/ipfs-multiarch:v0.4.22
           command: ["sh", "/custom/configure-ipfs.sh"]
           volumeMounts:
             - name: ipfs-storage
@@ -38,7 +38,7 @@ spec:
                   key: ipfs-bootstrap-peer-priv-key
       containers:
         - name: ipfs
-          image: "ipfs/go-ipfs:v0.4.21"
+          image: theduske/ipfs-multiarch:v0.4.22
           imagePullPolicy: IfNotPresent
           env:
             - name: IPFS_FD_MAX
@@ -80,7 +80,7 @@ spec:
           resources:
             {}
         - name: ipfs-cluster
-          image: "ipfs/ipfs-cluster:v0.11.0-rc4"
+          image: theduske/ipfs-cluster-multi:v0.11.0
           imagePullPolicy: IfNotPresent
           command: ["sh", "/custom/entrypoint.sh"]
           # envFrom:
