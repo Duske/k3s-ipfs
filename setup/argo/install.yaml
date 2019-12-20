@@ -315,7 +315,7 @@ spec:
         - --configmap
         - workflow-controller-configmap
         - --executor-image
-        - theduske/argoexec:dev
+        - theduske/argoexec:multi
         command:
         - workflow-controller
         image: theduske/workflow-controller:dev
