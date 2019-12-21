@@ -15,33 +15,38 @@ services:
       - .:/output
     ports:
       - 6443:6443
-      # - 8285:8285 # IPDR PORT for pushing images
-      # - 8472:8472 # IPDR PORT for pushing images
+      - 8285:8285 # IPDR PORT for pushing images
+      - 2379:2379 # IPDR PORT for pushing images
+      - 2380:2380 # IPDR PORT for pushing images
+      - 10250:10250 # IPDR PORT for pushing images
+      - 10251:10251 # IPDR PORT for pushing images
+      - 10252:10252 # IPDR PORT for pushing images
+      - 10255:10255 # IPDR PORT for pushing images
     networks:
       - cluster
 
-  node1:
-    image: rancher/k3s:v1.0.0
-    tmpfs:
-      - /run
-      - /var/run
-    privileged: true
-    command: "agent --node-label worker=true --kubelet-arg='eviction-hard=imagefs.available<5%,nodefs.available<5%,memory.available<6000Mi'"
-    depends_on:
-      - server
-    volumes:
-      - ./setup/registries.yaml:/etc/rancher/k3s/registries.yaml
-      - ./worker_data:/worker_data
-    environment:
-      - K3S_URL=https://server:6443
-      - K3S_CLUSTER_SECRET=test
-      - CONTAINERD_LOG_LEVEL=debug
-    ports:
-      - 5000:5000 # IPDR PORT for pushing images
-      - 5001:5001 # IPDR PORT for pushing images
-      - 8555:8555 # IPDR PORT for pushing images
-    networks:
-      - cluster
+  # node1:
+  #   image: rancher/k3s:v1.0.0
+  #   tmpfs:
+  #     - /run
+  #     - /var/run
+  #   privileged: true
+  #   command: "agent --node-label worker=true --kubelet-arg='eviction-hard=imagefs.available<5%,nodefs.available<5%,memory.available<6000Mi'"
+  #   depends_on:
+  #     - server
+  #   volumes:
+  #     - ./setup/registries.yaml:/etc/rancher/k3s/registries.yaml
+  #     - ./worker_data:/worker_data
+  #   environment:
+  #     - K3S_URL=https://server:6443
+  #     - K3S_CLUSTER_SECRET=test
+  #     - CONTAINERD_LOG_LEVEL=debug
+  #   ports:
+  #     - 5000:5000 # IPDR PORT for pushing images
+  #     - 5001:5001 # IPDR PORT for pushing images
+  #     - 8555:8555 # IPDR PORT for pushing images
+  #   networks:
+  #     - cluster
 
   # node2:
   #   image: rancher/k3s:v1.0.0
