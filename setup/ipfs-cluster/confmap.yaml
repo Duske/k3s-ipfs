@@ -6,7 +6,8 @@ data:
   entrypoint.sh: |
     #!/bin/sh
     user=ipfs
-
+    set -e
+    set -x
     # This is a custom entrypoint for k8s designed to connect to the bootstrap
     # node running in the cluster. It has been set up using a configmap to
     # allow changes on the fly.
@@ -17,7 +18,8 @@ data:
     fi
 
     # CUSTOM: Open HTTP gateway to 0.0.0.0 and allow HTTP verbs
-    sed -i -e 's#/ip4/127.0.0.1/tcp/9094#/ip4/0.0.0.0/tcp/9094#' -e 's/"GET"/"GET", "POST", "PUT"/' /data/ipfs-cluster/service.json
+    sed -i -e 's#/ip4/127.0.0.1/tcp/9094#/ip4/0.0.0.0/tcp/9094#' -e 's/"value_log_loading_mode": 2/"value_log_loading_mode": 0/' -e 's/"GET"/"GET", "POST", "PUT"/' -e 's/"value_log_file_size": 1073741823/"value_log_file_size": '"$BADGER_VALUELOGFILESIZE"'/' /data/ipfs-cluster/service.json
+    cat /data/ipfs-cluster/service.json
     PEER_HOSTNAME=`cat /proc/sys/kernel/hostname`
 
     grep -q ".*ipfs-cluster-0.*" /proc/sys/kernel/hostname
@@ -53,12 +55,13 @@ data:
       exit 0
     fi
 
-    ipfs init --profile=badgerds #,server
+    # Disable badger, See https://github.com/ipfs/go-ipfs/issues/4242#issuecomment-496395193
+    ipfs init --profile=local-discovery #,server
     ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
     ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
     ipfs config --json Swarm.ConnMgr.HighWater 2000
-    ipfs config --json Datastore.BloomFilterSize 1048576
-    ipfs config Datastore.StorageMax 100GB
+    #ipfs config --json Datastore.BloomFilterSize 1048576
+    #ipfs config Datastore.StorageMax 100GB
 
     PEER_HOSTNAME=`cat /proc/sys/kernel/hostname`
     echo $IPFS_PEER_ID

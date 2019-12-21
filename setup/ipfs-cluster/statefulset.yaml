@@ -104,6 +104,8 @@ spec:
                   key: cluster-secret
             - name: CLUSTER_MONITOR_PING_INTERVAL
               value: "3m"
+            - name: BADGER_VALUELOGFILESIZE
+              value: "5242880" #5MB
             - name: SVC_NAME
               value: "ipfs-cluster"
           ports:
