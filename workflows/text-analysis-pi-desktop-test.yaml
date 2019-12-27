@@ -3,6 +3,11 @@ kind: Workflow
 metadata:
   generateName: text-analysis
 spec:
+  #ttlSecondsAfterFinished: 60
+  arguments:
+    parameters:
+      - name: filename
+        value: ""
   entrypoint: extract-data
   templates:
   - name: extract-data
@@ -61,20 +66,23 @@ spec:
 
   - name: extract-data-template
     nodeSelector:
-      kubernetes.io/arch: amd64
+      kubernetes.io/arch: arm
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-metadata-extractor:latest
       #image: ipfs-companion:5000/ciqmjrloulgan5nvknwkekuukcck2cp2tab5x2uvjhj3f325t3genxa
       image: ipfs-companion:5000/ciqojt27jw6fuaaxrckof2z5z23nryjj2r5movbsc6nyvy5gm2tnlsq
       command: [sh, -c]
-      args: ["npm start /worker_data/simplex.pdf"]
+      resources:
+        requests:
+          cpu: "2"
+      args: ["npm start /worker_data/{{workflow.parameters.filename}}"]
       volumeMounts:
         - mountPath: /worker_data
           name: datavol
     volumes:
     - name: datavol
       hostPath:
-        path: /home/dustin/testdata
+        path: /home/pi/sample
         type: Directory
     outputs:
       artifacts:
@@ -88,11 +96,16 @@ spec:
           storageEndpoint: "http://ipfs-cluster:9094/add"
 
   - name: guess-language
+    nodeSelector:
+      kubernetes.io/arch: arm
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser
       #image: ipfs-companion:5000/ciqfhhzayced47yof4k2cp5apxdvtqg5jihq6qampdijdfy7zrcahfq
       image: ipfs-companion:5000/ciqo6pq2tmmmd55s52izgri3na7cn3q5337t6nxmasaxpxdkh3lvc2q
       command: [sh, -c]
+      resources:
+        requests:
+          cpu: "1"
       args: ["npm start /tmp/text"]
     inputs:
       artifacts:
@@ -106,11 +119,16 @@ spec:
           storageEndpoint: "http://ipfs-cluster:9094/add"
 
   - name: core-phrases
+    nodeSelector:
+      kubernetes.io/arch: arm
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser
       #image: ipfs-companion:5000/ciqk6evg3tunp6tsv6xparhx544gjnoaitlsqt66ughybwwzmivboci
       image: ipfs-companion:5000/ciqopnn655s5ndkdimg6j7hlortibtzxo4keyyxf5vp4fov5o2yu7pq
       command: [sh, -c]
+      resources:
+        requests:
+          cpu: "1"
       args: ["npm start /tmp/text"]
     inputs:
       artifacts:
@@ -124,11 +142,16 @@ spec:
           storageEndpoint: "http://ipfs-cluster:9094/add"
 
   - name: stats
+    nodeSelector:
+      kubernetes.io/arch: arm
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-statistican
       #image: ipfs-companion:5000/ciqkmfhfgokdvvbpqbaiskatcemtyq3qcwirgnvkj5g2oawmmuc5vbq
       image: ipfs-companion:5000/ciqbf6x75m7nu4ajwjov53t2yrsqkm5pguglawq57ihlwu4yk6wobfa
       command: [sh, -c]
+      resources:
+        requests:
+          cpu: "1"
       args: ["npm start /tmp/text"]
     inputs:
       artifacts:
@@ -142,11 +165,16 @@ spec:
           storageEndpoint: "http://ipfs-cluster:9094/add"
 
   - name: keywords
+    nodeSelector:
+      kubernetes.io/arch: arm
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-keyword-extractor
       #image: ipfs-companion:5000/ciqolgnteqxgsfzsq6ix3dsjoc7gldypfljbutedf273uaq4ntdbtri
       image: ipfs-companion:5000/ciqg3bqeq7fmu6othgvoubxhd5nkyevdkfgoatnscae2oy5wm7yazhq
       command: [sh, -c]
+      resources:
+        requests:
+          cpu: "1"
       args: ["npm start /tmp/text"]
     inputs:
       artifacts:
@@ -160,11 +188,16 @@ spec:
           storageEndpoint: "http://ipfs-cluster:9094/add"
 
   - name: merger
+    nodeSelector:
+      kubernetes.io/arch: arm
     container:
       # registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/json-merger
       #image: ipfs-companion:5000/ciqkfhqo7lychgh3olbky2wd7ocz3nttotjeql4qma5ot2jdbpgx7iq
       image: ipfs-companion:5000/ciqfratszd2nzqttqrpcvlo3omddu6w3ivrxbatl5yn5qewoai27z2a
       command: [sh, -c]
+      resources:
+        requests:
+          cpu: "1"
       args: ["npm start /tmp/jsons"]
     inputs:
       artifacts:
