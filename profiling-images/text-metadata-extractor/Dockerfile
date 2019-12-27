@@ -1,13 +1,10 @@
-FROM registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/base-node-java
+FROM node:10.15.0-alpine
 MAINTAINER Dustin Chabrowski <dustin.chabrowski@isst.fraunhofer.de>
 
-ARG proxy
-ARG sproxy
-ARG noproxy
+# See https://github.com/docker-library/openjdk/blob/b4f29ba829765552239bd18f272fcdaf09eca259/8-jre/alpine/Dockerfile
+RUN apk upgrade --update && \
+    apk add openjdk8-jre
 
-ENV http_proxy="$proxy"
-ENV https_proxy="$sproxy"
-ENV no_proxy="$noproxy"
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
