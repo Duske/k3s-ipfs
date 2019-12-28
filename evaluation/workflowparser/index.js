@@ -36,5 +36,5 @@ const endDate = getOldestEnddate(workflows);
 console.log(
     startDate,
     endDate,
-    diffInMinutes(endDate, startDate)
+    diffInMinutes(endDate, startDate) + " minutes"
 )
