@@ -1,0 +1,35 @@
+json-merger.tar 
+    /ipfs/QmUJ9xQjfhW6ygriZz6zV3z6LswXVHwdRhVEXtcqL7VWtf
+    ciqfratszd2nzqttqrpcvlo3omddu6w3ivrxbatl5yn5qewoai27z2a
+
+text-core-phrase-extractor.tar
+    /ipfs/Qmdw9dBcx4ku5rW9Ewhnj7r3WRuLY8mhmUXmGdsUg1ewYy
+    ciqopnn655s5ndkdimg6j7hlortibtzxo4keyyxf5vp4fov5o2yu7pq
+
+text-keyword-extractor.tar
+    /ipfs/QmViBg5MTddC9BuZp9d1todT2w5iv65YWLuJFCXowkAnqK
+    ciqg3bqeq7fmu6othgvoubxhd5nkyevdkfgoatnscae2oy5wm7yazhq
+
+text-statistican.tar
+    /ipfs/QmPck2tuvSD55ixgJnGSFxzuyeSpR8TSR9GYLESxruMxom
+    ciqbf6x75m7nu4ajwjov53t2yrsqkm5pguglawq57ihlwu4yk6wobfa
+
+text-language-guesser.tar
+    /ipfs/QmeSZ5GJoje9NyV8jQfcSPjvRyJDYLMkYQYm3CzD2CnqHs
+    ciqo6pq2tmmmd55s52izgri3na7cn3q5337t6nxmasaxpxdkh3lvc2q
+
+text-metadata-extractor.tar
+    /ipfs/Qmdjq4mLzTDJzin8WN1mWdh8PXopj8A3ATbGkd9ATy6E1o
+    ciqojt27jw6fuaaxrckof2z5z23nryjj2r5movbsc6nyvy5gm2tnlsq
+
+
+
+sudo k3s crictl pull ipfs-companion:5000/ciqfratszd2nzqttqrpcvlo3omddu6w3ivrxbatl5yn5qewoai27z2a
+sudo k3s crictl pull ipfs-companion:5000/ciqopnn655s5ndkdimg6j7hlortibtzxo4keyyxf5vp4fov5o2yu7pq
+sudo k3s crictl pull ipfs-companion:5000/ciqg3bqeq7fmu6othgvoubxhd5nkyevdkfgoatnscae2oy5wm7yazhq
+sudo k3s crictl pull ipfs-companion:5000/ciqbf6x75m7nu4ajwjov53t2yrsqkm5pguglawq57ihlwu4yk6wobfa
+sudo k3s crictl pull ipfs-companion:5000/ciqo6pq2tmmmd55s52izgri3na7cn3q5337t6nxmasaxpxdkh3lvc2q
+sudo k3s crictl pull ipfs-companion:5000/ciqojt27jw6fuaaxrckof2z5z23nryjj2r5movbsc6nyvy5gm2tnlsq
+
+
+
