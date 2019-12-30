@@ -1,0 +1,93 @@
+Name:                      text-analysisvr7dl-555070617
+Namespace:                 default
+Priority:                  0
+Node:                      raspberrypi/192.168.2.27
+Start Time:                Mon, 30 Dec 2019 15:22:28 +0100
+Labels:                    workflows.argoproj.io/completed=false
+                           workflows.argoproj.io/workflow=text-analysisvr7dl
+Annotations:               workflows.argoproj.io/node-name: text-analysisvr7dl.extract-data(0)
+                           workflows.argoproj.io/template:
+                             {"name":"extract-data-template","arguments":{},"inputs":{},"outputs":{"artifacts":[{"name":"meta","path":"/usr/src/app/meta.json","ipfs":{...
+Status:                    Terminating (lasts 49m)
+Termination Grace Period:  30s
+IP:                        10.42.4.60
+IPs:
+  IP:           10.42.4.60
+Controlled By:  Workflow/text-analysisvr7dl
+Containers:
+  wait:
+    Container ID:  containerd://d566413b62b14b2c498d95ff140bf9f54b9c21d53241d8e35f1a5c39f9e86f5a
+    Image:         theduske/argoexec:multi
+    Image ID:      docker.io/theduske/argoexec@sha256:32704514b9094a8373d78b9b9914cb5fcc3ac5f5fb34584e39abd24ed384064d
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      argoexec
+      wait
+    State:          Running
+      Started:      Mon, 30 Dec 2019 15:22:31 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      ARGO_POD_NAME:                    text-analysisvr7dl-555070617 (v1:metadata.name)
+      ARGO_CONTAINER_RUNTIME_EXECUTOR:  pns
+      ARGO_KUBELET_HOST:                 (v1:status.hostIP)
+    Mounts:
+      /argo/podmetadata from podmetadata (rw)
+      /mainctrfs/worker_data from datavol (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-cpl5l (ro)
+  main:
+    Container ID:  containerd://a015e40c0d80c5c90783064dd06f5e90e9efcadf322284b695e5f933695d24bb
+    Image:         ipfs-companion:5000/ciqojt27jw6fuaaxrckof2z5z23nryjj2r5movbsc6nyvy5gm2tnlsq
+    Image ID:      ipfs-companion:5000/ciqojt27jw6fuaaxrckof2z5z23nryjj2r5movbsc6nyvy5gm2tnlsq@sha256:fe4e7a5ba2060a0bfee4d4c6ccf42fbdfc8182a46a32d655b3f67d1b6fe71359
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+    Args:
+      npm start /worker_data/draft-ali-pce-remote-initiated-gmpls-lsp-00.pdf
+    State:          Running
+      Started:      Mon, 30 Dec 2019 15:22:34 +0100
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        2
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-cpl5l (ro)
+      /worker_data from datavol (rw)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             False 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  podmetadata:
+    Type:  DownwardAPI (a volume populated by information about the pod)
+    Items:
+      metadata.annotations -> annotations
+  datavol:
+    Type:          HostPath (bare host directory volume)
+    Path:          /home/pi/sample
+    HostPathType:  Directory
+  default-token-cpl5l:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-cpl5l
+    Optional:    false
+QoS Class:       Burstable
+Node-Selectors:  kubernetes.io/arch=arm
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type    Reason     Age        From                  Message
+  ----    ------     ----       ----                  -------
+  Normal  Scheduled  <unknown>  default-scheduler     Successfully assigned default/text-analysisvr7dl-555070617 to raspberrypi
+  Normal  Pulled     55m        kubelet, raspberrypi  Container image "theduske/argoexec:multi" already present on machine
+  Normal  Created    55m        kubelet, raspberrypi  Created container wait
+  Normal  Started    55m        kubelet, raspberrypi  Started container wait
+  Normal  Pulling    55m        kubelet, raspberrypi  Pulling image "ipfs-companion:5000/ciqojt27jw6fuaaxrckof2z5z23nryjj2r5movbsc6nyvy5gm2tnlsq"
+  Normal  Pulled     55m        kubelet, raspberrypi  Successfully pulled image "ipfs-companion:5000/ciqojt27jw6fuaaxrckof2z5z23nryjj2r5movbsc6nyvy5gm2tnlsq"
+  Normal  Created    55m        kubelet, raspberrypi  Created container main
+  Normal  Started    55m        kubelet, raspberrypi  Started container main
