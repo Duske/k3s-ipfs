@@ -1,0 +1,63 @@
+Name:                text-analysiszk7k9
+Namespace:           default
+ServiceAccount:      default
+Status:              Succeeded
+Created:             Mon Dec 30 23:18:11 +0100 (4 minutes ago)
+Started:             Mon Dec 30 23:18:11 +0100 (4 minutes ago)
+Finished:            Mon Dec 30 23:22:53 +0100 (now)
+Duration:            4 minutes 42 seconds
+Parameters:          
+  filename:          draft-campbell-oauth-mtls-01.pdf
+
+STEP                                          PODNAME                        DURATION  MESSAGE
+ ✔ text-analysiszk7k9 (extract-data)                                                   
+ ├-✔ extract-data(0) (extract-data-template)  text-analysiszk7k9-4226270348  3m        
+ ├-✔ core-phrases(0) (core-phrases)           text-analysiszk7k9-257294224   46s       
+ ├-✔ keywords (keywords)                                                               
+ | ├-⚠ keywords(0) (keywords)                 text-analysiszk7k9-3552744288  1m        pod deleted
+ | └-✔ keywords(1) (keywords)                 text-analysiszk7k9-2143277197  45s       
+ ├-✔ stats(0) (stats)                         text-analysiszk7k9-458649211   40s       
+ ├-✔ guess-language (guess-language)                                                   
+ | ├-⚠ guess-language(0) (guess-language)     text-analysiszk7k9-1419494714  1m        pod deleted
+ | └-✔ guess-language(1) (guess-language)     text-analysiszk7k9-815353335   35s       
+ └-✔ merger(0) (merger)                       text-analysiszk7k9-212812366   13s       
+
+### start workflow - extraction on pi 2
+NAME                            READY   STATUS      RESTARTS   AGE     IP            NODE                   NOMINATED NODE   READINESS GATES
+ipfs-cluster-0                  2/2     Running     8          4d12h   10.42.0.170   dustin-elementary-gt   <none>           <none>
+ipfs-companion-wlknh            2/2     Running     8          4d12h   10.42.0.168   dustin-elementary-gt   <none>           <none>
+ipfs-companion-cf24w            2/2     Running     8          35h     10.42.4.61    raspberrypi            <none>           <none>
+ipfs-companion-bdpw2            2/2     Running     12         35h     10.42.3.246   raspberrypi2           <none>           <none>
+text-analysiszk7k9-458649211    0/2     Init:0/1    0          2s      <none>        raspberrypi            <none>           <none>
+text-analysiszk7k9-257294224    0/2     Init:0/1    0          2s      <none>        raspberrypi            <none>           <none>
+text-analysiszk7k9-3552744288   0/2     Init:0/1    0          2s      <none>        raspberrypi2           <none>           <none>
+text-analysiszk7k9-4226270348   0/2     Completed   0          3m24s   10.42.3.247   raspberrypi2           <none>           <none>
+text-analysiszk7k9-1419494714   0/2     Init:0/1    0          1s      <none>        raspberrypi2           <none>           <none>
+
+### drain pi 2
+kubectl drain raspberrypi2 --ignore-daemonsets --force --grace-period=0 --delete-local-data
+node/raspberrypi2 already cordoned
+WARNING: ignoring DaemonSet-managed Pods: kube-system/svclb-traefik-5xvxx, default/ipfs-companion-bdpw2
+evicting pod "text-analysiszk7k9-1419494714"
+evicting pod "text-analysiszk7k9-4226270348"
+evicting pod "text-analysiszk7k9-3552744288"
+pod/text-analysiszk7k9-4226270348 evicted
+pod/text-analysiszk7k9-1419494714 evicted
+pod/text-analysiszk7k9-3552744288 evicted
+node/raspberrypi2 evicted
+
+
+### check new scheduling -- all on pi 1
+
+NAME                            READY   STATUS            RESTARTS   AGE     IP            NODE                   NOMINATED NODE   READINESS GATES
+ipfs-cluster-0                  2/2     Running           8          4d12h   10.42.0.170   dustin-elementary-gt   <none>           <none>
+ipfs-companion-wlknh            2/2     Running           8          4d12h   10.42.0.168   dustin-elementary-gt   <none>           <none>
+ipfs-companion-cf24w            2/2     Running           8          35h     10.42.4.61    raspberrypi            <none>           <none>
+ipfs-companion-bdpw2            2/2     Running           12         35h     10.42.3.246   raspberrypi2           <none>           <none>
+text-analysiszk7k9-458649211    0/2     Completed         0          72s     10.42.4.157   raspberrypi            <none>           <none>
+text-analysiszk7k9-257294224    0/2     Completed         0          72s     10.42.4.158   raspberrypi            <none>           <none>
+text-analysiszk7k9-815353335    0/2     Completed         0          54s     10.42.4.159   raspberrypi            <none>           <none>
+text-analysiszk7k9-2143277197   0/2     Completed         0          53s     10.42.4.160   raspberrypi            <none>           <none>
+text-analysiszk7k9-212812366    0/2     PodInitializing   0          6s      10.42.4.161   raspberrypi            <none>           <none>
+
+
