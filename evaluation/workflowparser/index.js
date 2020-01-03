@@ -1,7 +1,12 @@
 const jsonFilePath = process.argv[2];
+const outputNameArg = process.argv[3];
 const jsonFile = require(jsonFilePath);
 
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const outputName = outputNameArg || "results.csv";
+if(!outputNameArg) {
+    console.log("Please specify an output filename! Default is used.");
+}
 const csvWriter = createCsvWriter({
     header: [
         { id: 'filename', title: 'filename'},
@@ -15,7 +20,7 @@ const csvWriter = createCsvWriter({
         { id: 'time_guess-language',title: 'time_guess-language'},
         { id: 'time_merger',title: 'time_merger'}
     ],
-    path: 'results.csv'
+    path: outputName
 });
 
 const workflows = jsonFile.items;
@@ -62,13 +67,6 @@ console.log(
     diffInMinutes(endDate, startDate) + " minutes"
 )
 
-const writeRecords = async (records) => {
-    return csvWriter.writeRecords(records)
-    .then(() => {
-        console.log('...Done');
-    });
-}
-
 const analyzeWorkflow = workflows => {
     return workflows.map(workflow => {
         const startDate = new Date(workflow.status.startedAt);
@@ -106,8 +104,11 @@ const analyzeWorkflow = workflows => {
 }
 
 const boot = async () => {
+    console.log("Processing...");
     const records = analyzeWorkflow(workflows);
-    await writeRecords(records);
+    console.log("Writing file...");
+    await csvWriter.writeRecords(records);
+    console.log("Done...");
 }
 
-boot().then(() => console.log("success")).then(err => console.log(err));
+boot().then(() => console.log("success")).catch(err => console.log(err));
