@@ -1,116 +1,42 @@
-# k3s with IPFS
+# K3S with IPFS
 
-## Build image
+This project aims to evaluate a data analytics network based on K3S and IPFS.
+It allows to run analytics workflows in a scalable and reproducible way while utilizing 
+the resources of a K3S cluster.
+For example, idle resources of edge devices can be harnessed that way.
 
-```
-docker-compose build
-```
-
-## Alias
-```
-alias k="kubectl --kubeconfig kubeconfig.yaml"
-```
-
-## Generic
-```
-k get pods --all-namespaces
-
-```
-
-## Dashboard
-```
-# http only
-k apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/alternative/kubernetes-dashboard.yaml
-
-k -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
-
-k create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
-```
-
-#### Proxy
-```
-k -n kube-system port-forward deployment/kubernetes-dashboard 9090:9090
-```
-[http://localhost:9090/#!/overview?namespace=default](http://localhost:9090/#!/overview?namespace=default)
-
-#### Metrics
-```
-k top pods
-k top nodes
-```
-
-## Node Token
-```
-docker exec -it k3s-ipfs_server_1 cat /var/lib/rancher/k3s/server/node-token
-```
-
-## Argo
-```
-# UI
-k -n argo port-forward deployment/argo-ui 8001:8001
-
-# Publish workflow hello-world
-argo submit --kubeconfig kubeconfig.yaml --watch workflows/hello-world.yaml
-```
-
-## k3s
-
-You can list the running containers with:
-
-`k3s crictl ps`
-
-And list the downloaded images with
-
-`k3s crictl images`
+## Evaluation
+Performance graphs, sample data, scripts, and failover tests are stored in `evaluation`.
 
 
-### IPFS Cluster
-ipfs-cluster-ctl --host /dns4/ipfs-cluster-0.ipfs-cluster/tcp/9094/  status
+## Setup
 
-read annotation metadata 
-```
-k get pod ipfs-workflowc7j7x-2807610159 -o jsonpath='{.metadata.annotations}'
-```
+## K3S Agent config
 
-/Users/dchabrowski/Dev/Go/src/github.com/argoproj/argo/dist/argo submit --kubeconfig /Users/dchabrowski/Dev/Uni/MA/k3s-ipfs/kubeconfig.yaml --watch workflows/csv_host_data.yaml --receipt
+### Install k3s
 
-## IPDR 
+` K3S_URL=<Host-IP of master> K3S_TOKEN=test curl -sfL https://get.k3s.io | sh -`
 
-Push image to IPDR
-`ipdr push --ipfs-host 127.0.0.1:5001 csv-meta`
+#### Custom registry
 
+* Place `setup/registries.yaml` in `/etc/rancher/k3s/registries.yaml`
+* Edit `/etc/systemd/system/k3s-agent.service` to match `./k3s-agent.service`
+
+## Local development
+If Docker and Docker Compose are installed, you can run this system locally.
+Simply use the `scripts/setup.sh` script to create the system.
+
+### IPDR 
+IPDR is used to serve container images from IPFS. This enables a reproducible workflows later on by utilizing the content-addressed 
+CIDs.
+Please see [this fork](https://github.com/Duske/ipdr) for ipdr.
 
 ```
-ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-core-phrase-extractor
-
-ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-language-guesser
-
-ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-metadata-extractor:latest
-
-ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-statistican
-
-ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/text-keyword-extractor
-
-ipdr push --ipfs-host 127.0.0.1:5001 registry.gitlab.cc-asp.fraunhofer.de:4567/dchabrowski/distributed-analysis-network/json-merger
+  ipdr push-oci <path to image file>.tar
 ```
 
-
-## Multiarch images
-
-* Enable docker experimental features for multiarch goodness
-* `docker buildx create --name mybuilder      `
-* `docker buildx use mybuilder --bootstrap`
-* `docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7  -o type=oci,dest=- . > image.tar`
-* manual prep: `ipfs add -r image/`
-* ipdr: `ipdr push --oci image.tar`
-
-### OCI Images
+## Submit a workflow
 
 ```
-  ipdr push-oci profiling-images/json-merger/json-merger.tar
-  ipdr push-oci profiling-images/text-core-phrase-extractor/text-core-phrase-extractor.tar
-  ipdr push-oci profiling-images/text-keyword-extractor/text-keyword-extractor.tar
-  ipdr push-oci profiling-images/text-statistican/text-statistican.tar
-  ipdr push-oci profiling-images/text-language-guesser/text-language-guesser.tar
-  ipdr push-oci profiling-images/text-metadata-extractor/text-metadata-extractor.tar
+argo submit --kubeconfig <path to kubeconfig.yaml> --watch <path to workflow.yaml> 
 ```

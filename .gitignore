@@ -1,2 +1,3 @@
 kubeconfig.yaml
 profiling-images/**/*.tar
+worker_data
